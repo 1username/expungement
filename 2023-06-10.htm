@@ -402,17 +402,17 @@ $("#recent_felony").click(function(){
         return false;}
    else if ($('#yes_recent_felony').is(':checked')) {
    alert("end point; conditional eligibility");
+   $("div.C_DV").hide();
    $("#RecentFelonyResponse").text("Not eligible until 5 years after completion of most recent felony sentence.");
-   $("div.Cprev_Mexpungement").hide();
    $("#infoNeeded_Recent_Felony").text(" ");
    }
    else if ($('#not_recent_felony').is(':checked')) {
-   $("div.Cprev_Mexpungement").show();
+   $("div.C_DV").show();
    $("#RecentFelonyResponse").text("There's no felony conviction");
    $("#infoNeeded_Recent_Felony").text(" ");
    }
    else { $("#infoNeeded_Recent_Felony").text("* If there's been a felony conviction");
-   $("div.Cprev_Mexpungement").show();
+   $("div.C_DV").show();
    $("RecentFelonyResponse").text(" ");
    }
 })
