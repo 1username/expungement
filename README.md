@@ -4,8 +4,8 @@ I wrote this as my first legal analysis automation stab, to practice and sort ho
 
 I used javascript. It is only tested and set to work on desktop Windows and Linux environment. I haven't sorted it for small screens or for Iphone/Mac yet. Only set up click events, right now. 
 
-I still need to put in more for the 893 and 894 analysis.
-there's also that marijauana bill that hasn't been signed yet, and the automation one that hasn't been signed yet, but I'd only put the links to the bills in there somewhere
-When somebody qualifies and is eligible for a waiver
-explanatory section about IFPs, or link to one
+* I still need to put in more for the 893 and 894 analysis, how that works exactly in practice.
+* There's also that marijuana bill that hasn't been signed yet, and the automation one that hasn't been signed yet, but I'd only put the links to the bills in there somewhere
+* Break down of when somebody qualifies and is eligible for a waiver
+* explanatory section about IFPs, or link to one
 
