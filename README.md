@@ -7,7 +7,7 @@ I used javascript. It is only tested and set to work on desktop Windows and Linu
 * I still need to put in more for the 893 and 894 analysis, how that works exactly in practice.
 * A clear explanation of what is filed when, the process 
 * For all the spots it ends with attorney review needed you should break it all the way down
-* There's also that marijuana bill that hasn't been signed yet, and the automation one that hasn't been signed yet, but I'd only put the links to the bills in there somewhere
+* There's also that marijuana bill that hasn't been signed yet, and the automation one that hasn't been signed yet, but I'd only put the links to the bills in there somewhere, if they pass set a timer with an alert when they go into effect
 * Break down of when somebody qualifies and is eligible for a waiver
 * explanatory section about IFPs, or link to one
 
