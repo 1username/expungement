@@ -4,11 +4,8 @@ I wrote this as my first legal analysis automation stab, to practice and sort ho
 
 I used javascript. It is only tested and set to work on desktop Windows and Linux environment. I haven't sorted it for small screens or for Iphone/Mac yet. Only set up click events, right now. 
 
-* I put in a version with some 893 and 894 info, but not satisfied with how links are incorporated in, and need to add info about the 893 Motions and 894 Motions in the logic flow question/responses.
-* A clear explanation of what is filed when, the process 
-* For all the spots it ends with attorney review needed you should break it all the way down
-* There's also that marijuana bill that hasn't been signed yet, and the automation one that hasn't been signed yet, but I'd only put the links to the bills in there somewhere, if they pass set a timer with an alert when they go into effect
-* Break down of when somebody qualifies and is eligible for a waiver
-* explanatory section about IFPs, or link to one
-
-6/19/23 added in some forms and made a drop down for that, and an unpopulated letters section. Adjusted the response on if they completed pretrial diversion program to address both 976 (A) 1 and 976 (A) 2
+* The 7-8-23 version has 893 and 894 info added to question responses, and drop down 893/894 at top.
+* A clear explanation of what is filed when, where, and how, the process 
+* For all the spots it ends with attorney review needed you should try to break it all the way down
+* There's also that marijuana bill that hasn't been signed yet, and the automation one that hasn't been signed yet, but I'd only put the links to the bills in there somewhere, if they pass set a timer with an alert when they go into effect - needs to be done
+* explanatory section about IFPs, or link to an explantion; you have a current IFP form link already in Forms
