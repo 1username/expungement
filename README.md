@@ -8,3 +8,4 @@ I used javascript. It is only tested and set to work on desktop Windows and Linu
 * A clear explanation of what is filed when, where, and how, the process 
 * For all the spots it ends with attorney review needed you should try to break it all the way down
 * explanatory section about IFPs, or link to an explantion; you have a current IFP form link already in Forms
+* The 11-10-23 version has the new marijuana statute fully added in.
