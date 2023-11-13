@@ -9,3 +9,4 @@ I used javascript. It is only tested and set to work on desktop Windows and Linu
 * For all the spots it ends with attorney review needed you should try to break it all the way down
 * explanatory section about IFPs, or link to an explantion; you have a current IFP form link already in Forms
 * The 11-10-23 version has the new marijuana statute fully added in.
+* 11-13-23 has the automation stuff added in, still need to add drop down function, and something for that time period to alert.
