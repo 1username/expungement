@@ -1,12 +1,12 @@
 # expungement
 expungement program for Louisiana
-I wrote this as my first legal analysis automation try, to practice and sort how to write a useful program, and to make it personally useful for my colleagues to simplify the learning curve. The logic flow is mostly pulled off the Justice and Accountability app, all the scripting is fresh. I'm still updating this to get the logic all updated and correct with recent statutory updates , and to increase the level of detail, analysis, links for verification, and inclusion of language for convenience when drafting.
+I wrote this as my first legal analysis automation try, to practice and sort how to write a useful program, and to make it personally useful for my colleagues to simplify the learning curve. The logic flow is mostly pulled off the Justice and Accountability app, all the scripting is fresh. 
 
-I used javascript. It is only tested and set to work on desktop Windows and Linux environment. I haven't sorted it for small screens or for Iphone/Mac yet. Only set up click events, right now. 
+I used javascript. It is only tested and set to work on desktop Windows and Linux environment. It works on small screens but it needs the formatting fixed.
 
-* The 7-8-23 version has 893 and 894 info added to question responses, and drop down 893/894 at top.
 * A clear explanation of what is filed when, where, and how, the process 
 * For all the spots it ends with attorney review needed you should try to break it all the way down
 * explanatory section about IFPs, or link to an explantion; you have a current IFP form link already in Forms
-* The 11-10-23 version has the new marijuana statute fully added in.
-* 11-13-23 has the automation stuff added in, still need to add drop down function, and something for that time period to alert.
+* All the recent statutes are included, the marijuana and automation statutes.
+* Make the formatting look good on small screens.
+
