@@ -1,0 +1,2209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expungement Analysis Program - Louisiana
+</title>
+    <style type="text/css">
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+
+$(document).ready(function(){
+//start of state selection button function
+$("#state_selection").click(function(){
+   if (!$("input[name='state_selection']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#Louisiana').is(':checked')) {
+   $("div.Cnumber_of_arrests").show();
+   $("#StateButtonResponse").text("The charge they are seeking expungement for is in the State of Louisiana.");
+   $("#infoNeeded_State").text(" ");
+   }
+   else if ($('#other_state').is(':checked')) {
+   $("div.Cnumber_of_arrests").hide();
+   $("#StateButtonResponse").text("If they are seeking an expungement for an out of state arrest then you can stop here. We do not provide assistance for out of state expungements. The applicant can be referred to the DA and to legal aid in the State that the charges they're seeking expungement on are in.");
+      $("div.Cnumber_of_arrests").hide();
+   $("#infoNeeded_State").text(" ");
+   alert('Not eligible');
+   }
+   else { 
+   $("#infoNeeded_State").text("* State where they were arrested");
+   $("#StateButtonResponse").text(" ");
+   }
+}); //this is the end of the state selection button function
+//start of arrest quantity button function
+$("#arrest_quantity").click(function(){
+   if (!$("input[name='arrest_quantity']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#zero_arrests').is(':checked')) {
+   alert("End point, no expungement needed");
+   $("#ArrestQuantityResponse").text("They have no arrests. No expungement is needed.");
+   $("#infoNeeded_ArrestQuantity").text(" ");
+   $("div.Cif_incarcerated").hide()
+   }
+   else if ($('#one_arrest').is(':checked')) {
+   $("div.Cif_incarcerated").show()
+   $("#ArrestQuantityResponse").text("One arrest.");
+   $("#infoNeeded_ArrestQuantity").text(" ");
+   }
+   else if ($('#two_arrests').is(':checked')) {
+   $("div.Cif_incarcerated").show()
+   $("#ArrestQuantityResponse").text("Two arrests.");
+   $("#infoNeeded_ArrestQuantity").text(" ");
+   }
+   else if ($('#three_or_more_arrests').is(':checked')) {
+   $("div.Cif_incarcerated").show();
+   $("#ArrestQuantityResponse").text("Three or more arrests.");
+   $("#infoNeeded_ArrestQuantity").text(" ");
+   }
+   else {$("div.Cif_incarcerated").show();
+   $("#ArrestQuantityResponse").text(" ");
+   $("#infoNeeded_ArrestQuantity").text("* Number of arrests.");
+   }
+   }); 
+//this is the end of the arrest quantity button function
+//start of incarceration button function
+$("#incarceration_selection").click(function(){
+   if (!$("input[name='incarceration_selection']:checked").val()) {
+   	alert('Nothing is checked!');
+   	return false;}
+   else if ($('#not_incarcerated').is(':checked')) {
+   $("#IncarcerationResponse").text("Not incarcerated");
+   $("#infoNeeded_IncarcerationResponse").text(" ");
+   $("div.C977DMarijuana").show();
+   }
+   else if ($('#yes_incarcerated').is(':checked')) {
+   $("#IncarcerationResponse").text("The applicant is incarcerated. They are not eligible for expungement as per LA Code Crim Pro art. 975 (2021) 'A person in the physical custody of the Department of Public Safety and Corrections serving a sentence at hard labor shall not be permitted to file a motion to expunge a record of an arrest which did not result in a conviction or to expunge a record of an arrest and conviction of a misdemeanor or felony offense.'");
+   $("#infoNeeded_IncarcerationResponse").text(" ");
+      alert('Not eligible');
+      $("div.Cmost_recent").hide();
+   }
+   else {
+   $("#infoNeeded_IncarcerationResponse").text("*If applicant is incarcerated");
+   $("#IncarcerationResponse").text(" ");
+   $("div.Cmost_recent").hide();
+   }
+});
+//this is the end of the incarceration button function
+
+//start of ccrp 977D marijuana
+$("#marijuana_selection").click(function(){
+   if (!$("input[name='marijuana_selection']:checked").val()) {
+   	alert('Nothing is checked!');
+   	return false;}
+   else if ($('#not_mar').is(':checked')) {
+   $("#MarResponse").text("Not misdemeanor first offense marijuana possession");
+   $("#infoNeeded_MarResponse").text(" ");
+   $("div.Cmost_recent").show();
+   }
+   else if ($('#yes_mar').is(':checked')) {
+   $("#MarResponse").text("The applicant is seeking to expunge a misdemeanor conviction for a first offense possession of marijuana. If it has been 90 days since the date of conviction this charge is eligible for expungement per LA CCP Art. 977(D) (2023).");
+   $("#infoNeeded_MarResponse").text(" ");
+      alert('Eligible if 90 days past date of conviction');
+      $("div.Cmost_recent").hide();
+   }
+   else {
+   $("#infoNeeded_MarResponse").text("*If applicant is seeking to expunge a misdemeanor first offense marijuana possession");
+   $("#MarResponse").text(" ");
+   $("div.Cmost_recent").show();
+   }
+});
+//end of ccrp 977D marijuana
+
+//start of most recent arrest button function
+$("#most_recent_inquiry").click(function(){
+   if (!$("input[name='most_recent_inquiry']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#is_most_recent').is(':checked')) {
+   $("div.Cif_convicted").show();
+   $("div.C2ndif_convicted").hide();
+   $("#MostRecentResponse").text("The charge they are seeking expungement on is their most recent arrest.");
+   $("#infoNeeded_ChargeSelectionResponse").text(" ");
+   }
+   else if ($('#not_most_recent').is(':checked')) {
+   $("div.C2ndif_convicted").show();
+   $("div.Cif_convicted").hide();
+   $("#MostRecentResponse").text("The charge is not their most recent arrest.");
+   $("#infoNeeded_ChargeSelectionResponse").text(" ");
+   }
+   else { $("#infoNeeded_ChargeSelectionResponse").text("* If this is their most recent arrest.");
+   $("#MostRecentResponse").text(" ");
+   $("div.C2ndif_convicted").hide();
+   $("div.Cif_convicted").hide();
+   }
+})
+//end of most recent arrest button function
+//start of if convicted button function
+$("#if_convicted_inquiry").click(function(){
+   if (!$("input[name='if_convicted_inquiry']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_convicted').is(':checked')) {
+   $("div.Ccharge_type").show();
+   $("div.CProsecution_Outcome").hide();
+   $("#IfConvictedResponse").text("They were convicted.");
+   $("#infoNeeded_IfConvicted").text(" ");
+   }
+   else if ($('#not_convicted').is(':checked')) {
+   $("div.CProsecution_Outcome").show();
+   $("div.Ccharge_type").hide();
+   $("#IfConvictedResponse").text("They were not convicted.");
+   $("#infoNeeded_IfConvicted").text(" ");
+   }
+   else { $("#infoNeeded_IfConvicted").text("*If applicant was convicted");
+   $("#IfConvictedResponse").text(" ");
+   $("div.Ccharge_type").hide();
+   $("div.CProsecution_Outcome").hide();
+   }
+})
+//end of if convicted button function
+//start of charge selection button function
+$("#charge_cat").click(function(){
+   if (!$("input[name='charge_cat']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#felony').is(':checked')) {
+   $("div.Ccrime_of_violence").show();
+   $("div.Cmore_recent_felony").hide();
+   $("#ChargeSelectionResponse").text("The charge is a felony.");
+   $("#infoNeeded_ChargeSelectionResponse").text(" ");
+   }
+   else if ($('#misdemeanor').is(':checked')) {
+   $("div.Cmore_recent_felony").show();
+   $("div.Ccrime_of_violence").hide();
+   $("#ChargeSelectionResponse").text("The charge is a misdemeanor.");
+   $("#infoNeeded_ChargeSelectionResponse").text(" ");
+   }
+   else { $("#infoNeeded_ChargeSelectionResponse").text("*If charge was felony or misdemeanor");
+   $("div.Ccrime_of_violence").hide();
+   $("div.Cmore_recent_felony").hide();
+   $("#ChargeSelectionResponse").text(" ");
+   }
+})
+//this is the end of the charge selection button fuction
+//start of Crime of Violence button function
+$("#crime_of_vio").click(function(){
+   if (!$("input[name='crime_of_vio']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_crime_of_violence').is(':checked')) {
+   $("div.Csex_offender").hide();
+   alert('End point, likely not eligible');
+   $("#CrimeOfViolenceResponse").text("The charge is a Crime of Violence. They are ineligible unless it's been 10 years since sentence completion AND the crime of violence was one of the following: aggravated battery, 2nd degree battery, aggravated criminal damage to property, simple robbery, purse snatching, illegal use of weapons or dangerous instrumentalities, per LA Code Crim Pro 978 B(1)");
+   $("#infoNeeded_CrimeOfViolence").text(" ");
+   }
+   else if ($('#not_crime_of_violence').is(':checked')) {
+   $("div.Csex_offender").show();
+   $("#CrimeOfViolenceResponse").text("Not a Crime of Violence.");
+   $("#infoNeeded_CrimeOfViolence").text(" ");
+   }
+   else { $("#infoNeeded_CrimeOfViolence").text("*Was the charge a Crime of Violence");
+   $("#CrimeOfViolenceResponse").text(" ");
+   $("div.Csex_offender").hide();
+   }
+})
+//end of Crime of Violence button function
+//start of sex offender button function
+$("#sex_offense_crime").click(function(){
+   if (!$("input[name='sex_offense_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_sex_offense').is(':checked')) {
+   $("#SexOffenderResponse").text("The charge they are seeking expungement on required registration as a sex offender. Not eligible for expungement as per Section B(2)(a) of LA Code Crim Pro art. 978 (2021).");
+   $("#infoNeeded_SexOffender").text(" ");
+   alert("Not eligible");
+   }
+   else if ($('#not_sex_offense').is(':checked')) {
+   $("div.Cunder_17").show();
+   $("#SexOffenderResponse").text("Not a sex offender crime.");
+   $("#infoNeeded_SexOffender").text(" ");
+   }
+   else { $("#infoNeeded_SexOffender").text("* If they were required to register as a sex offender");
+   $("div.Cunder_17").hide();
+   $("#SexOffenderResponse").text(" ");
+   }
+})
+//end of sex offender button function
+//start of child under 17 button function
+$("#under17_crime").click(function(){
+   if (!$("input[name='under17_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_under17').is(':checked')) {
+   alert("End point - requires detailed attorney review");
+   $("div.Cdistribution_substance").hide();
+   $("#under17Response").text("This needs further detailed attorney review, may be ineligible.");
+   $("#infoNeeded_Under17").text(" ");
+   }
+   else if ($('#not_under17').is(':checked')) {
+   $("div.Cdistribution_substance").show();
+   $("#under17Response").text("Charges did not involve child under 17.");
+   $("#infoNeeded_Under17").text(" ");
+   }
+   else { $("#infoNeeded_Under17").text("* If charges involved a child under 17");
+   $("div.Cdistribution_substance").hide();
+   $("#under17Response").text(" ");
+   }
+})
+//end of child under 17 button function
+//start of distribution button function
+$("#distrib_crime").click(function(){
+   if (!$("input[name='distrib_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_distrib').is(':checked')) {
+   $("div.C1st_offender_Pardon").show();
+   $("div.C_art893E").hide();
+   $("#distributionResponse").text("Conviction for distribution or attempted distribution, not including PWI.");
+   $("#infoNeeded_Distribution").text(" ");
+   }
+   else if ($('#not_distrib').is(':checked')) {
+   $("div.C_art893E").show();
+   $("div.C1st_offender_Pardon").hide();
+   $("#distributionResponse").text("Not distribution charge.");
+   $("#infoNeeded_Distribution").text(" ");
+   }
+   else { $("#infoNeeded_Distribution").text("* If distribution or attempted distribution charge");
+   $("div.C1st_offender_Pardon").hide();
+   $("div.C_art893E").hide();
+   $("#distributionResponse").text(" ");
+   }
+})
+//end of distribution button function
+//start of First Offender Pardon letter button function
+$("#1st_offender_pardon_letter").click(function(){
+   if (!$("input[name='1st_offender_pardon_letter']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_Pardon').is(':checked')) {
+   alert("possibly eligible");
+   $("#pardonResponse").text("Received First Offender Pardon, may be eligible per LA Code Crim Pro art. 978, Section A(3), which states that 'Except as provided in Paragraph B of this Article, a person may file a motion to expunge his record of arrest and conviction of a felony offense if any of the following apply ... (3) The person is entitled to a first offender pardon for the offense pursuant to Article IV, Section 5(E)(1) of the Constitution of Louisiana, provided that the offense is not defined as a crime of violence pursuant to R.S. 14:2(B) or a sex offense pursuant to R.S. 15:541.'")
+   $("#infoNeeded_Pardon").text(" ");
+   }
+   else if ($('#no_Pardon').is(':checked')) {
+   alert("end point - needs detailed attorney review");
+   $("#pardonResponse").text("No First Offender Pardon, needs detailed attorney review.")
+   $("#infoNeeded_Pardon").text(" ");
+   }
+   else { $("#infoNeeded_Pardon").text("* Applicant needs to contact their local Probation and Parole office where they were supervised to see if there is one in their file")
+   $("#pardonResponse").text(" ");
+   }
+})
+//end of First Offender Pardon letter button function
+//start of 893E button function
+$("#893E").click(function(){
+   if (!$("input[name='893E']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_893E').is(':checked')) {
+   $("div.Cprobation_completed").show();
+   $("div.C3rd_1st_offender_pardon").hide();
+   $("#893EResponse").text("Convicted under article 893E to a deferred sentence (probation only).");
+   $("#infoNeeded_893E").text(" ");
+   }
+   else if ($('#no_893E').is(':checked')) {
+   $("#893EResponse").text("Not convicted under 893E to a deferred sentence (probation only)");
+   $("div.C3rd_1st_offender_pardon").show();
+   $("div.Cprobation_completed").hide();
+   $("#infoNeeded_893E").text(" ");
+   }
+   else { $("#infoNeeded_893E").text("* If convicted under 893E to a deferred sentence");
+   $("div.Cprobation_completed").hide();
+   $("div.C3rd_1st_offender_pardon").hide();
+   $("#893EResponse").text(" ");
+   }
+})
+//end of 893E button function
+//start of probation button function
+$("#probation").click(function(){
+   if (!$("input[name='probation']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_probation').is(':checked')) {
+   alert("eligible");
+   $("div.C2nd_1st_offender_pardon").hide();
+   $("#probationResponse").text("Probation completed satisfactorily. Likely eligible. After a client successfully files an 893 Motion the conviction is then eligible for expungement, if it wasn't already. Filing an 893 Motion has the same effect as an acquittal, making the conviction immediately eligible for expungement.");
+   $("#infoNeeded_Probation").text(" ");
+   }
+   else if ($('#no_probation').is(':checked')) {
+   $("div.C2nd_1st_offender_pardon").show();
+   $("#probationResponse").text("Probation not completed satisfactorily");
+   $("#infoNeeded_Probation").text(" ");
+   }
+   else { $("#infoNeeded_Probation").text("* If probation was completed satisfactorily");
+   $("div.C2nd_1st_offender_pardon").hide();
+   $("#probationResponse").text(" ");
+   }
+})
+//end of probation button function
+//start of 2nd First Offender Pardon letter button function
+$("#2nd_1st_offender_pardon_letter").click(function(){
+   if (!$("input[name='2nd_1st_offender_pardon_letter']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_Pardon').is(':checked')) {
+   alert("eligible");
+   $("#2ndpardonResponse").text("Received First Offender Pardon, may be eligible per LA Code Crim Pro art. 978, Section A(3).")
+   $("#infoNeeded_2ndPardon").text(" ");
+   }
+   else if ($('#2ndno_Pardon').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#2ndpardonResponse").text("Did not receive First Offender Pardon. Not eligible to expunge this record until 10 years has passed after completion of any sentence per Louisiana Code of Criminal Procedure Article 978A(2).")
+   $("#infoNeeded_2ndPardon").text(" ");
+   }
+   else { $("#infoNeeded_2ndPardon").text("* Applicant needs to contact their local Probation and Parole office where they were supervised to see if there is one in their file")
+   $("#2ndpardonResponse").text(" ");
+   }
+})
+//end of 2nd First Offender Pardon letter button function
+//start of 3rd First Offender Pardon letter button function
+$("#3rd_1st_offender_pardon_letter").click(function(){
+   if (!$("input[name='3rd_1st_offender_pardon_letter']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#3rdyes_Pardon').is(':checked')) {
+   alert("Likely eligible");
+   $("div.C10years").hide();
+   $("#3rdpardonResponse").text("Received First Offender Pardon, likely eligible per LA Code Crim Pro art. 978, Section A(3).");
+   $("#infoNeeded_3rdPardon").text(" ");
+   }
+   else if ($('#3rdno_Pardon').is(':checked')) {
+   $("div.C10years").show();
+   $("#3rdpardonResponse").text("Didn't receive First Offender Pardon.");
+   $("#infoNeeded_3rdPardon").text(" ");
+   }
+   else { $("#infoNeeded_3rdPardon").text("* Applicant will need to contact their local Probation and Parole office where they were supervised to see if there is one in their file");
+   $("div.C10years").hide();
+   $("#3rdpardonResponse").text(" ");
+   }
+})
+//end of 3rd First Offender Pardon letter button function
+//start of 10 years button function
+$("#10_years").click(function(){
+   if (!$("input[name='10_years']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_10_years').is(':checked')) {
+   alert("likely eligible");
+   $("#10yearsResponse").text("Likely eligible per LA Code Crim Pro art. 978, Section A(2).");
+   $("#infoNeeded_10years").text(" ");
+   }
+   else if ($('#not_10_years').is(':checked')) {
+   $("#10yearsResponse").text("Not eligible until 10 years has passed since they completed any sentence per LA Code Crim Pro art. 978, Section A(2).");
+   $("#infoNeeded_10years").text(" ");
+   alert("end point, conditional eligibility");
+   }
+   else { $("#infoNeeded_10years").text("* If 10 years has passed since completion of the sentence. Per the selections made to get to this question, at this point this charge is both a felony and their most recent arrest/conviction");
+   $("10yearsResponse").text(" ");
+   }
+})
+//end of 10 years button function
+//start of more recent felony button function -- this is the one you were editing ******
+$("#recent_felony").click(function(){
+   if (!$("input[name='recent_felony']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_recent_felony').is(':checked')) {
+   alert("end point; conditional eligibility");
+   $("#RecentFelonyResponse").text("Not eligible until 5 years after completion of most recent felony sentence.");
+   $("div.Cprev_Mexpungement").hide();
+   $("#infoNeeded_Recent_Felony").text(" ");
+   }
+   else if ($('#not_recent_felony').is(':checked')) {
+   $("div.C_DV").show();
+   $("#RecentFelonyResponse").text("There's no felony conviction");
+   $("#infoNeeded_Recent_Felony").text(" ");
+   }
+   else { $("#infoNeeded_Recent_Felony").text("* If there's been a felony conviction");
+   $("div.Cprev_Mexpungement").show();
+   $("RecentFelonyResponse").text(" ");
+   }
+})
+//end of more recent felony button function
+//start of DV button function
+$("#DV").click(function(){
+   if (!$("input[name='DV']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_DV').is(':checked')) {
+   $("#DVResponse").text("Charge arose out of DV arrest.")
+   $("div.C_abuse").show();
+   $("div.C2ndsex_offender").hide();
+   $("#infoNeeded_DV").text(" ");
+   }
+   else if ($('#not_DV').is(':checked')) {
+   $("#DVResponse").text("Charge didn't arise out of DV arrest");
+   $("div.C2ndsex_offender").show();
+   $("div.C_abuse").hide();
+   $("#infoNeeded_DV").text(" ");
+   }
+   else { $("#infoNeeded_DV").text("* If charge arose out of DV arrest")
+   $("div.C_abuse").hide();
+   $("div.C2ndsex_offender").hide();
+   $("#DVResponse").text(" ");
+   }
+})
+//end of DV button function
+//start of abuse button function
+$("#abuse").click(function(){
+   if (!$("input[name='abuse']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_abuse').is(':checked')) {
+   alert("Not eligible");
+   $("#AbuseResponse").text("Ineligible, Domestic Abuse and Stalking convictions are not eligible per LA Code Crim Pro art. 977, Section C(2) & Section C(3).");
+   $("#infoNeeded_Abuse").text(" ");
+   $("div.C894").hide();
+   }
+   else if ($('#not_abuse').is(':checked')) {
+   $("#AbuseResponse").text("Not convicted of Domestic Abuse and/or Stalking");
+   $("div.C894").show();
+   $("#infoNeeded_Abuse").text(" ");
+   }
+   else { $("#infoNeeded_Abuse").text("* If convicted of Domestic Abuse and/or Stalking");
+   $("div.C894").hide();
+   $("AbuseResponse").text(" ");
+   }
+})
+//end of abuse button function
+//start of 894 button function
+$("#894").click(function(){
+   if (!$("input[name='894']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_894').is(':checked')) {
+   $("div.C2ndprobation_completed").show();
+   $("#894Response").text("Pled to a reduced charge (not Domestic Abuse or Stalking) and received a deferred sentence of probation under 894.");
+   $("#infoNeeded_894").text(" ");
+   }
+   else if ($('#not_894').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#894Response").text("Ineligible until 10 years after completion of most recent sentence.");
+   $("#infoNeeded_894").text(" ");
+   }
+   else { $("#infoNeeded_894").text("* If received a deferred sentence of probation under 894");
+   $("div.C2ndprobation_completed").hide();
+   $("#894Response").text(" ");
+   }
+})
+//end of 894 button function
+//start of 2nd probation button function
+$("#2ndprobation").click(function(){
+   if (!$("input[name='2ndprobation']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_probation').is(':checked')) {
+   alert("likely eligible");
+   $("#2ndprobationResponse").text("Likely eligible. After a client successfully files an 894 Motion the conviction is then eligible for expungement, if they weren't already. Filing an 894 Motion has the same effect as an acquittal, making the conviction immediately eligible for expungement.")
+   $("#infoNeeded_2ndProbation").text(" ");
+   }
+   else if ($('#2ndno_probation').is(':checked')) {
+   alert("end point; conditional eligibility");
+   $("#2ndprobationResponse").text("The charge may be eligible for expungement ten years after completion of the most recent sentence.")
+   $("#infoNeeded_2ndProbation").text(" ");
+   }
+   else { $("#infoNeeded_2ndProbation").text("* If probation was completed satisfactorily")
+   $("#2ndprobationResponse").text(" ");
+   }
+})
+//end of 2nd probation button function
+//start of 2nd sex offender button function
+$("#2ndsex_offense_crime").click(function(){
+   if (!$("input[name='2ndsex_offense_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_sex_offense').is(':checked')) {
+   alert("likely not eligible");
+   $("div.C2nd_894").hide();
+   $("#2ndSexOffenderResponse").text("The charge they are seeking expungement on required registration as a sex offender. Likely not eligible for expungement as per Section C1 of LA Code Crim Pro art. 977 (2021). Requires detailed attorney review.");
+   $("#infoNeeded_2ndSexOffender").text(" ");
+   }
+   else if ($('#2ndnot_sex_offense').is(':checked')) {
+   $("div.C2nd_894").show();
+   $("#2ndSexOffenderResponse").text("Not a sex offender crime.");
+   $("#infoNeeded_2ndSexOffender").text(" ");
+   }
+   else { $("#infoNeeded_2ndSexOffender").text("* If they were required to register as a sex offender");
+   $("div.C2nd_894").hide();
+   $("#2ndSexOffenderResponse").text(" ");
+   }
+})
+//end of 2nd sex offender button function
+//start of 2nd 894 button function
+$("#2nd894").click(function(){
+   if (!$("input[name='2nd894']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_894').is(':checked')) {
+   $("#2nd894Response").text("Received a deferred sentence of probation under 894.");
+   $("div.C3rdprobation_completed").show();
+   $("#infoNeeded_2nd894").text(" ");
+   }
+   else if ($('#2ndnot_894').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("div.C3rdprobation_completed").hide();
+   $("#2nd894Response").text("Ineligible until 5 years after completion of the sentence");
+   $("#infoNeeded_2nd894").text(" ");
+   }
+   else { $("#infoNeeded_2nd894").text("* If received a deferred sentence of probation under 894");
+   $("div.C3rdprobation_completed").hide();
+   $("#2nd894Response").text(" ");
+   }
+})
+//end of 2nd 894 button function
+//start of 3rd probation button function
+$("#3rdprobation").click(function(){
+   if (!$("input[name='3rdprobation']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#3rdyes_probation').is(':checked')) {
+   alert("likely eligible");
+   $("#3rdprobationResponse").text("Likely eligible. After a client successfully files an 894 Motion the conviction is then eligible for expungement, if it wasn't already. Filing an 894 Motion has the same effect as an acquittal, making the conviction immediately eligible for expungement.");
+   $("#infoNeeded_3rdProbation").text(" ");
+   }
+   else if ($('#3rdno_probation').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#3rdprobationResponse").text("The charge may be eligible for expungement five years after completion of the sentence.");
+   $("#infoNeeded_3rdProbation").text(" ");
+   }
+   else { $("#infoNeeded_3rdProbation").text("* If probation was completed satisfactorily");
+   $("#3rdprobationResponse").text(" ");
+   }
+})
+//end of 3rd probation button function
+//start of prosecution outcome button function
+$("#Prosecution_Outcome").click(function(){
+   if (!$("input[name='Prosecution_Outcome']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#Not_Guilty_or_Quashed').is(':checked')) {
+   alert("likely eligible");
+   $("#prosecutionOutcomeResponse").text("Not guilty or quashed. Likely eligible. In some cases court costs may be waived if there was an acquittal or successful motion to quash");
+   $("#infoNeeded_Prosecution_Outcome").text(" ");
+   $("div.Cdiversion_DUI").hide();
+   $("div.Ctrue_bill").hide();
+   }
+   else if ($('#DA_Refused_or_Dismissed').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#prosecutionOutcomeResponse").text("DA Refused or Dismissed. Per 976(A)1 if 'the person was not prosecuted for the offense for which he was arrested, and the limitations on the institution of prosecution have barred the prosecution for that offense' then the eligibility depends on if the time period has passed when the prosecution can charge them. The time periods are in the Title 17 Chapter 1 link at the top of this page under the CCRP links. The DA can give the applicant a certification letter that the time period has passed. Per 976(A)2 if they 'declined to prosecute any offense arising out of that arrest, including the reason that the person successfully completed a pretrial diversion program..' then a prescriptive period for prosecution isn't applicable");
+   $("#infoNeeded_Prosecution_Outcome").text(" ");
+   $("div.Cdiversion_DUI").hide();
+   $("div.Ctrue_bill").hide();
+   }
+   else if ($('#Successful_Diversion').is(':checked')) {
+   $("div.Cdiversion_DUI").show();
+   $("div.Ctrue_bill").hide();
+   $("#prosecutionOutcomeResponse").text("Prosecution Outcome was a successful diversion.");
+   $("#infoNeeded_Prosecution_Outcome").text(" ");
+   }
+   else if ($('#Sex_Offense_Not_Charged').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("div.Cdiversion_DUI").hide();
+   $("div.Ctrue_bill").hide();
+   $("#prosecutionOutcomeResponse").text("Sex offense not charged. The charge may be eligible for expungement 30 years from the date of offense.");
+   $("#infoNeeded_Prosecution_Outcome").text(" ");
+   }
+   else if ($('#Life_Imprisonment').is(':checked')) {
+   $("div.Cdiversion_DUI").hide();
+   $("div.Ctrue_bill").show();
+   $("#prosecutionOutcomeResponse").text("Charge penalty was life imprisonment.");
+   $("#infoNeeded_Prosecution_Outcome").text(" ");
+   }
+   else if ($('#Case_Still_Open_Pending').is(':checked')) {
+   alert("not eligible");
+   $("div.Cdiversion_DUI").hide();
+   $("div.Ctrue_bill").hide();
+   $("#prosecutionOutcomeResponse").text("Case still Open/Pending. Ineligible. A case must be closed or prescription have run out to be eligible for expungement.");
+   $("#infoNeeded_Prosecution_Outcome").text(" ");
+   }
+   else { $("#infoNeeded_Prosecution_Outcome").text("* Prosecution Outcome");
+   $("div.Cdiversion_DUI").hide();
+   $("div.Ctrue_bill").hide();
+   $("#prosecutionOutcomeResponse").text(" ");
+   }
+})
+//end of prosecution outcome button function
+//start of DUI button function
+$("#diversion_DUI").click(function(){
+   if (!$("input[name='diversion_DUI']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_DUI').is(':checked')) {
+   $("div.Cdiversion_comp").hide();
+   alert("End point, conditional eligibility.");
+   $("#DUIResponse").text("Defendants who participate in a Diversion program from a DUI are ineligible for 5 years from date of offense");
+   $("#infoNeeded_DUI").text(" ");
+   }
+   else if ($('#not_DUI').is(':checked')) {
+   $("div.Cdiversion_comp").show();
+   $("#DUIResponse").text("The diversion program did not stem from a DUI arrest.");
+   $("#infoNeeded_DUI").text(" ");
+   }
+   else { $("#infoNeeded_DUI").text("* If diversion program arose from DUI arrest");
+   $("#DUIResponse").text(" ");
+   $("div.Cdiversion_comp").hide();
+   }
+})
+//end of DUI button function
+//start of diversion completion button function
+$("#diversion_comp").click(function(){
+   if (!$("input[name='diversion_comp']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_diversion_comp').is(':checked')) {
+   alert("likely eligible");
+   $("#diversion_compResponse").text("Likely eligible. They should have received a letter of successful completion from the DA to confirm program completion status.");
+   $("#infoNeeded_diversion_comp").text(" ");
+   }
+   else if ($('#not_diversion_comp').is(':checked')) {
+   alert("End point, follow instructions for correct option selection.");
+   $("#diversion_compResponse").text("If the diversion program wasn't completed, or it was revoked and charges reinstated, then the correct selection for the 'How did the prosecution end' question is that they were convicted/pled guilty to a misdemeanor.");
+   $("#infoNeeded_diversion_comp").text(" ");
+   }
+   else { $("#infoNeeded_diversion_comp").text("* If diversion program was completed successfully");
+   $("#diversion_compResponse").text(" ");
+   }
+})
+//end of diversion completion button function
+//start of true bill button function
+$("#true_bill").click(function(){
+   if (!$("input[name='true_bill']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_true_bill').is(':checked')) {
+   alert("likely ineligible");
+   $("#trueBillResponse").text("Likely not eligible, needs detailed attorney review. When a prosecution has been initiated following a True Bill, there is no time limit to institute formal proceedings.");
+   $("#infoNeeded_trueBill").text(" ");
+   }
+   else if ($('#no_true_bill').is(':checked')) {
+   alert("end point, needs detailed attorney review");
+   $("#trueBillResponse").text("This needs detailed attorney review");
+   $("#infoNeeded_trueBill").text(" ");
+   }
+   else { $("#infoNeeded_trueBill").text("* If a True Bill was filed against them");
+   $("#trueBillResponse").text(" ");
+   }
+})
+//end of true bill button function
+//start of 2nd if convicted button function
+$("#2ndif_convicted_inquiry").click(function(){
+   if (!$("input[name='2ndif_convicted_inquiry']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_convicted').is(':checked')) {
+   $("div.C2ndcharge_type").show();
+   $("#2ndIfConvictedResponse").text("They were convicted.");
+   $("#infoNeeded_2ndIfConvicted").text(" ");
+   }
+   else if ($('#2ndnot_convicted').is(':checked')) {
+   $("div.C2ndcharge_type").hide();
+   $("#2ndIfConvictedResponse").text("They were not convicted. They are likely eligible for expungement");
+   $("#infoNeeded_2ndIfConvicted").text(" ");
+   alert("eligible");
+   }
+   else { $("#infoNeeded_2ndIfConvicted").text("*If they were convicted");
+   $("#2ndIfConvictedResponse").text(" ");
+   $("div.C2ndcharge_type").hide();
+   }
+})
+//end of 2nd if convicted button function
+//start of 2nd charge selection button function
+$("#2ndcharge_cat").click(function(){
+   if (!$("input[name='2ndcharge_cat']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndfelony').is(':checked')) {
+   $("div.Csubsequent_conviction").show();
+   $("div.C3rdmore_recent_felony").hide();
+   $("#2ndChargeSelectionResponse").text("The charge they are seeking to expunge is a felony.");
+   $("#infoNeeded_2ndChargeSelectionResponse").text(" ");
+   }
+   else if ($('#2ndmisdemeanor').is(':checked')) {
+   $("div.Csubsequent_conviction").hide();
+   $("div.C3rdmore_recent_felony").show();
+   $("#2ndChargeSelectionResponse").text("The charge they are seeking to expunge is a misdemeanor.");
+   $("#infoNeeded_2ndChargeSelectionResponse").text(" ");
+   }
+   else { $("#infoNeeded_2ndChargeSelectionResponse").text("*If charge was felony or misdemeanor");
+   $("#2ndChargeSelectionResponse").text(" ");
+   $("div.Csubsequent_conviction").hide();
+   $("div.C3rdmore_recent_felony").hide();
+   }
+})
+//this is the end of the 2nd charge selection button fuction
+//start of subsequent conviction button function
+$("#subsequent_conviction").click(function(){
+   if (!$("input[name='subsequent_conviction']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#yes_SubCon').is(':checked')) {
+   $("div.C2ndcrime_of_violence").hide();
+   $("#SubConResponse").text("Not eligible. The felony charge they are seeking to expunge will not be eligible for expungement until 10 years after completion of their most recent sentence, per CCRP article 978A(2).");
+   $("#infoNeeded_SubCon").text(" ");
+   alert('Not eligible');
+   }
+   else if ($('#no_SubCon').is(':checked')) {
+   $("div.C2ndcrime_of_violence").show();
+   $("#SubConResponse").text("They have no convictions subsequent to the charge they are seeking to expunge.");
+   $("#infoNeeded_SubCon").text(" ");
+   }
+   else { 
+   $("div.C2ndcrime_of_violence").hide();
+   $("#infoNeeded_SubCon").text("*If they have convictions subsequent to the charge they are seeking to expunge");
+   $("#SubConResponse").text(" ");
+   }
+})
+//end of subsequent conviction button function
+//start of 2nd Crime of Violence button function
+$("#2ndcrime_of_vio").click(function(){
+   if (!$("input[name='2ndcrime_of_vio']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_crime_of_violence').is(':checked')) {
+   $("#2ndCrimeOfViolenceResponse").text("The charge is a Crime of Violence. They are ineligible unless it's been 10 years since sentence completion and the crime of violence was one of the following: aggavated battery, 2nd degree battery, aggravated criminal damage to property, simple robbery, purse snatching, illegal use of weapons or dangerous instrumentalities.");
+   $("div.C3rdsex_offender").hide();
+   $("#infoNeeded_2ndCrimeOfViolence").text(" ");
+   alert('Not eligible');
+   }
+   else if ($('#2ndnot_crime_of_violence').is(':checked')) {
+   $("#2ndCrimeOfViolenceResponse").text("Not a Crime of Violence.");
+   $("div.C3rdsex_offender").show();
+   $("#infoNeeded_2ndCrimeOfViolence").text(" ");
+   }
+   else { $("#infoNeeded_2ndCrimeOfViolence").text("*Was the charge a Crime of Violence");
+   $("#2ndCrimeOfViolenceResponse").text(" ");
+   $("div.C3rdsex_offender").hide();
+   }
+})
+//end of 2nd Crime of Violence button function
+//start of 3rd sex offender button function
+$("#3rdsex_offense_crime").click(function(){
+   if (!$("input[name='3rdsex_offense_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#3rdyes_sex_offense').is(':checked')) {
+   alert("not eligible");
+   $("#3rdSexOffenderResponse").text("The charge they are seeking expungement on required registration as a sex offender. Not eligible for expungement as per Section C1 of LA Code Crim Pro art. 977 (2021)");
+   $("div.C2ndunder_17").hide();
+   $("#infoNeeded_3rdSexOffender").text(" ");
+   alert('Not eligible');
+   }
+   else if ($('#3rdnot_sex_offense').is(':checked')) {
+   $("div.C2ndunder_17").show();
+   $("#3rdSexOffenderResponse").text("Not a sex offender crime.")
+   $("#infoNeeded_3rdSexOffender").text(" ");
+   }
+   else { $("#infoNeeded_3rdSexOffender").text("* If they were required to register as a sex offender");
+   $("div.C2ndunder_17").hide();
+   $("#3rdSexOffenderResponse").text(" ");
+   }
+})
+//end of 3rd sex offender button function
+//start of 2nd child under 17 button function
+$("#2ndunder17_crime").click(function(){
+   if (!$("input[name='2ndunder17_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_under17').is(':checked')) {
+   $("div.C2nddistribution_substance").hide();
+   $("#2ndunder17Response").text("This needs detailed attorney review, may be ineligible.")
+   $("#infoNeeded_2ndUnder17").text(" ");
+   alert('possibly ineligible, needs detailed review');
+   }
+   else if ($('#2ndnot_under17').is(':checked')) {
+   $("div.C2nddistribution_substance").show();
+   $("#2ndunder17Response").text("Charges did not involve child under 17.")
+   $("#infoNeeded_2ndUnder17").text(" ");
+   }
+   else { $("#infoNeeded_2ndUnder17").text("* If charges involved a child under 17");
+   $("div.C2nddistribution_substance").hide();
+   $("#2ndunder17Response").text(" ");
+   }
+})
+//end of 2nd child under 17 button function
+//start of 2nd distribution button function
+$("#2nddistrib_crime").click(function(){
+   if (!$("input[name='2nddistrib_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_distrib').is(':checked')) {
+   $("#2nddistributionResponse").text("Conviction for distribution or attempted distribution, not including PWI.");
+   $("div.C4th1st_offender_Pardon").show();
+   $("div.C2nd893E").hide();
+   $("#infoNeeded_2ndDistribution").text(" ");
+   }
+   else if ($('#2ndnot_distrib').is(':checked')) {
+   $("div.C2nd893E").show();
+   $("div.C4th1st_offender_Pardon").hide();
+   $("#2nddistributionResponse").text("Not distribution charge.")
+   $("#infoNeeded_2ndDistribution").text(" ");
+   }
+   else { $("#infoNeeded_2ndDistribution").text("* If distribution or attempted distribution charge");
+   $("div.C4th1st_offender_Pardon").hide();
+   $("div.C2nd893E").hide();
+   $("#2nddistributionResponse").text(" ");
+   }
+})
+//end of 2nd distribution button function
+//start of 4th First Offender Pardon letter button function
+$("#4th1st_offender_pardon_letter").click(function(){
+   if (!$("input[name='4th1st_offender_pardon_letter']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#4thyes_Pardon').is(':checked')) {
+   $("#4thpardonResponse").text("Received First Offender Pardon, may be eligible per LA Code Crim Pro art. 978, Section A(3).");
+   $("#infoNeeded_4thPardon").text(" ");
+   alert('eligible');
+   }
+   else if ($('#4thno_Pardon').is(':checked')) {
+   $("#4thpardonResponse").text("No First Offender Pardon, needs detailed attorney review.");
+   $("#infoNeeded_4thPardon").text(" ");
+   alert('End point, needs detailed attorney review');
+   }
+   else { $("#infoNeeded_4thPardon").text("* Applicant will need to contact their local Probation and Parole office where they were supervised to see if there is a First Offender Pardon letter in their file");
+   $("#4thpardonResponse").text(" ");
+   }
+})
+//end of 4th First Offender Pardon letter button function
+//start of 2nd 893E button function
+$("#2nd893E").click(function(){
+   if (!$("input[name='2nd893E']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_893E').is(':checked')) {
+   $("div.C4thprobation_completed").show();
+   $("div.C6th1stoffenderPardon").hide();
+   $("#2nd893EResponse").text("Convicted under article 893E to a deferred sentence (probation only).")
+   $("#infoNeeded_2nd893E").text(" ");
+   }
+   else if ($('#2ndno_893E').is(':checked')) {
+   $("div.C6th1stoffenderPardon").show();
+   $("div.C4thprobation_completed").hide();
+   $("#2nd893EResponse").text("Not convicted under 893E to a deferred sentence (probation only)")
+   $("#infoNeeded_2nd893E").text(" ");
+   }
+   else { $("#infoNeeded_2nd893E").text("* If convicted under 893E to a deferred sentence");
+   $("div.C4thprobation_completed").hide();
+   $("div.C6th1stoffenderPardon").hide();
+   $("#2nd893EResponse").text(" ");
+   }
+})
+//end of 2nd 893E button function
+//start of 4th probation button function
+$("#4thprobation").click(function(){
+   if (!$("input[name='4thprobation']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#4thyes_probation').is(':checked')) {
+   $("div.C5th1stoffenderPardon").hide();
+   $("#4thprobationResponse").text("Probation completed satisfactorily. After a client successfully files an 893 Motion the conviction is then eligible for expungement, if it wasn't already. Filing an 893 Motion has the same effect as an acquittal, making the conviction immediately eligible for expungement.");
+   $("#infoNeeded_4thProbation").text(" ");
+   alert('eligible');
+   }
+   else if ($('#4thno_probation').is(':checked')) {
+   $("#4thprobationResponse").text("Probation not completed satisfactorily");
+   $("div.C5th1stoffenderPardon").show();
+   $("#infoNeeded_4thProbation").text(" ");
+   }
+   else { $("#infoNeeded_4thProbation").text("* If probation was completed satisfactorily");
+   $("div.C5th1stoffenderPardon").hide();
+   $("#4thprobationResponse").text(" ");
+   }
+})
+//end of 4th probation button function
+//start of 5th First Offender Pardon letter button function
+$("#5th_1st_offender_pardon_letter").click(function(){
+   if (!$("input[name='5th_1st_offender_pardon_letter']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#5thyes_Pardon').is(':checked')) {
+   $("#5thpardonResponse").text("Received First Offender Pardon, may be eligible per LA Code Crim Pro art. 978, Section A(3)");
+   $("#infoNeeded_5thPardon").text(" ");
+   alert('End point, likely eligible');
+   }
+   else if ($('#5thno_Pardon').is(':checked')) {
+   $("#5thpardonResponse").text("Did not receive First Offender Pardon. Likely not eligible until 10 years have passed since any sentence completion.");
+   $("#infoNeeded_5thPardon").text(" ");
+   alert('End point, likely not eligible');
+   }
+   else { $("#infoNeeded_5thPardon").text("* Applicant will need to contact their local Probation and Parole office where they were supervised to see if there is one in their file");
+   $("#5thpardonResponse").text(" ");
+   }
+})
+//end of 5th First Offender Pardon letter button function
+//start of 6th First Offender Pardon letter button function
+$("#6th_1st_offender_pardon_letter").click(function(){
+   if (!$("input[name='6th_1st_offender_pardon_letter']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#6thyes_Pardon').is(':checked')) {
+   $("div.C2nd10Years").hide();
+   $("#6thpardonResponse").text("Received First Offender Pardon, may be eligible per LA Code Crim Pro art. 978, Section A(3)");
+   $("#infoNeeded_6thPardon").text(" ");
+   alert('End point, likely eligible');
+   }
+   else if ($('#6thno_Pardon').is(':checked')) {
+   $("div.C2nd10Years").show();
+   $("#6thpardonResponse").text("Didn't receive First Offender Pardon.");
+   $("#infoNeeded_6thPardon").text(" ");
+   }
+   else { $("#infoNeeded_6thPardon").text("* Applicant will need to contact their local Probation and Parole office where they were supervised to see if there is one in their file");
+   $("div.C2nd10Years").hide();
+   $("#6thpardonResponse").text(" ");
+   }
+})
+//end of 6th First Offender Pardon letter button function
+//start of 2nd 10 years button function
+$("#2nd10_years").click(function(){
+   if (!$("input[name='2nd10_years']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_10_years').is(':checked')) {
+   alert("likely eligible");
+   $("#2nd10yearsResponse").text("Likely eligible");
+   $("#infoNeeded_2nd10years").text(" ");
+   }
+   else if ($('#2ndnot_10_years').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#2nd10yearsResponse").text("Not eligible until 10 years has passed since they completed their most recent per LA Code Crim Pro art. 978, Section A(2).");
+   $("#infoNeeded_2nd10years").text(" ");
+   }
+   else { $("#infoNeeded_2nd10years").text("* If 10 years has passed since most recent sentence completion");
+   $("2nd10yearsResponse").text(" ");
+   }
+})
+//end of 2nd 10 years button function
+//start of 3rd more recent felony button function
+$("#3rdrecent_felony").click(function(){
+   if (!$("input[name='3rdrecent_felony']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#3rdyes_recent_felony').is(':checked')) {
+   $("div.C2ndDV").hide();
+   $("#3rdRecentFelonyResponse").text("Not eligible until 5 years after completion of most recent felony sentence");
+   $("#infoNeeded_3rdRecent_Felony").text(" ");
+   alert('not eligible end point');
+   }
+   else if ($('#3rdnot_recent_felony').is(':checked')) {
+   $("div.C2ndDV").show();
+   $("#3rdRecentFelonyResponse").text("There's no more recent felony conviction");
+   $("#infoNeeded_3rdRecent_Felony").text(" ");
+   }
+   else { $("#infoNeeded_3rdRecent_Felony").text("* If there's been a more recent felony conviction");
+   $("div.C2ndDV").hide();
+   $("3rdRecentFelonyResponse").text(" ");
+   }
+})
+//end of 3rd more recent felony button function
+//start of 2nd DV button function
+$("#2ndDV").click(function(){
+   if (!$("input[name='2ndDV']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_DV').is(':checked')) {
+   $("#2ndDVResponse").text("Charge arose out of DV arrest");
+   $("div.C2ndAbuse").show();
+   $("div.C4thsex_offender").hide();
+   $("#infoNeeded_2ndDV").text(" ");
+   }
+   else if ($('#2ndnot_DV').is(':checked')) {
+   $("#2ndDVResponse").text("Charge didn't arise out of DV arrest")
+   $("div.C4thsex_offender").show();
+   $("div.C2ndAbuse").hide();
+   $("#infoNeeded_2ndDV").text(" ");
+   }
+   else { $("#infoNeeded_2ndDV").text("* If charge arose out of DV arrest")
+   $("div.C2ndAbuse").hide();
+   $("div.C4thsex_offender").hide();
+   $("#2ndDVResponse").text(" ");
+   }
+})
+//end of 2nd DV button function
+//start of 2nd abuse button function
+$("#2ndabuse").click(function(){
+   if (!$("input[name='2ndabuse']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#2ndyes_abuse').is(':checked')) {
+   $("#2ndAbuseResponse").text("Ineligible, Domestic Abuse and Stalking convictions are not eligible per LA Code Crim Pro art. 977, Section C(2) & Section C(3).");
+   $("#infoNeeded_2ndAbuse").text(" ");
+   alert('not eligible');
+   }
+   else if ($('#2ndnot_abuse').is(':checked')) {
+   $("#2ndAbuseResponse").text("Not convicted of Domestic Abuse and/or Stalking");
+   $("div.C3rd894").show();
+   $("#infoNeeded_2ndAbuse").text(" ");
+   }
+   else { $("#infoNeeded_2ndAbuse").text("* If convicted of Domestic Abuse and/or Stalking");
+   $("div.C3rd894").hide();
+   $("#2ndAbuseResponse").text(" ");
+   }
+})
+//end of 2nd abuse button function
+//start of 3rd 894 button function
+$("#3rd894").click(function(){
+   if (!$("input[name='3rd894']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#3rdyes_894').is(':checked')) {
+   $("#3rd894Response").text("Pled to a reduced charge (not Domestic Abuse or Stalking) and received a deferred sentence of probation under 894.");
+   $("div.C5thprobation_completed").show();
+   $("#infoNeeded_3rd894").text(" ");
+   }
+   else if ($('#3rdnot_894').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#3rd894Response").text("Did not plead to a reduced charge under 894. Per CCRP art. 977 (A)(2) the charge is ineligible until 'More than five years have elapsed since the person completed any sentence, deferred adjudication, or period of probation or parole'");
+   $("div.C5thprobation_completed").hide();
+   $("#infoNeeded_3rd894").text(" ");
+   }
+   else { $("#infoNeeded_3rd894").text("* If received a deferred sentence of probation under 894");
+   $("div.C5thprobation_completed").hide();
+   $("3rd894Response").text(" ");
+   }
+})
+//end of 3rd 894 button function
+//start of 5th probation button function
+$("#5thprobation").click(function(){
+   if (!$("input[name='5thprobation']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#5thyes_probation').is(':checked')) {
+   $("#5thprobationResponse").text("Likely eligible. After a client successfully files an 894 Motion the conviction is then eligible for expungement, if it wasn't already. Filing an 894 Motion has the same effect as an acquittal, making the conviction immediately eligible for expungement.");
+   $("#infoNeeded_5thProbation").text(" ");
+   alert('eligible');
+   }
+   else if ($('#5thno_probation').is(':checked')) {
+   $("#5thprobationResponse").text("The charge may be eligible for expungement five years after completion of the sentence");
+   alert('end point');
+   $("#infoNeeded_5thProbation").text(" ");
+   }
+   else { $("#infoNeeded_5thProbation").text("* If probation was completed satisfactorily");
+   $("#5thprobationResponse").text(" ");
+   }
+})
+//end of 5th probation button function
+//start of 4th sex offender button function
+$("#4thsex_offense_crime").click(function(){
+   if (!$("input[name='4thsex_offense_crime']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#4thyes_sex_offense').is(':checked')) {
+   $("#4thSexOffenderResponse").text("Possibly eligible, requires detailed attorney review");
+   $("div.C4th894").hide();
+   $("#infoNeeded_4thSexOffender").text(" ");
+   alert('end point, needs detailed attorney review');
+   }
+   else if ($('#4thnot_sex_offense').is(':checked')) {
+   $("#4thSexOffenderResponse").text("Not a sex offender crime.");
+   $("div.C4th894").show();
+   $("#infoNeeded_4thSexOffender").text(" ");
+   }
+   else { $("#infoNeeded_4thSexOffender").text("* If they were required to register as a sex offender")
+   $("#4thSexOffenderResponse").text(" ");
+   $("div.C4th894").hide();
+   }
+})
+//end of 4th sex offender button function
+//start of 4th 894 button function
+$("#4th894").click(function(){
+   if (!$("input[name='4th894']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#4thyes_894').is(':checked')) {
+   $("#4th894Response").text("Received a deferred sentence of probation under 894.");
+   $("div.C6thprobation_completed").show();
+   $("#infoNeeded_4th894").text(" ");
+   }
+   else if ($('#4thnot_894').is(':checked')) {
+   alert("end point, conditional eligibility");
+   $("#4th894Response").text("Likely ineligible until 5 years after completion of the sentence");
+   $("div.C6thprobation_completed").hide();
+   $("#infoNeeded_4th894").text(" ");
+   }
+   else { $("#infoNeeded_4th894").text("* If received a deferred sentence of probation under 894")
+   $("4th894Response").text(" ");
+   $("div.C6thprobation_completed").hide();
+   }
+})
+//end of 4th 894 button function
+//start of 6th probation button function
+$("#6thprobation").click(function(){
+   if (!$("input[name='6thprobation']:checked").val()) {
+       alert('Nothing is checked!');
+        return false;}
+   else if ($('#6thyes_probation').is(':checked')) {
+   $("#6thprobationResponse").text("Probation completed satisfactorily. Likely eligible. After a client successfully files an 894 Motion the conviction is then eligible for expungement, if it wasn't already. Filing an 894 Motion has the same effect as an acquittal, making the conviction immediately eligible for expungement.");
+   $("#infoNeeded_6thProbation").text(" ");
+   alert('eligible');
+   }
+   else if ($('#6thno_probation').is(':checked')) {
+   $("#6thprobationResponse").text("Probation not completed satisfactorily. The charge may be eligible for expungement five years after completion of the sentence");
+   $("#infoNeeded_6thProbation").text(" ");
+   alert('End point');
+   }
+   else { $("#infoNeeded_6thProbation").text("* If probation was completed satisfactorily");
+   $("#6thprobationResponse").text(" ");
+   alert('End of flow chart');
+   }
+})
+//end of 6th probation button 
+
+
+//start of button click function to show/hide drop down of Prescription Periods for expungements
+$("#drop_down_prosecution_sol_button").click(function(){
+   var DivTargSOL = document.getElementById("TargetDivshowHideSOL4Prosecution");
+   if (DivTargSOL.style.display === "none") {
+   $("#TargetDivshowHideSOL4Prosecution").show();
+   }
+   else { $("#TargetDivshowHideSOL4Prosecution").hide();
+   }
+})
+//end of button click function to show/hide drop down of Prescription Periods for expungements
+
+//start of button click function to show/hide drop down of Act 78
+
+$("#drop_down_show_hide_Act78_button").click(function(){
+   var DivTargAct78 = document.getElementById("TargetDivshowHideAct78");
+
+   if (DivTargAct78.style.display === "none") {
+   $("#TargetDivshowHideAct78").show();
+   }
+   else { $("#TargetDivshowHideAct78").hide();
+   }
+})
+
+//end of button click function to show/hide drop down of Act 78
+
+//start of button click function to show/hide drop down of marijuana
+
+$("#drop_down_show_hide_mar_button").click(function(){
+   var DivTargAct78 = document.getElementById("TargetDivshowHidemar");
+
+   if (DivTargAct78.style.display === "none") {
+   $("#TargetDivshowHidemar").show();
+   }
+   else { $("#TargetDivshowHidemar").hide();
+   }
+})
+
+//end of button click function to show/hide drop down of marijuana
+
+//start of button click function to show/hide drop down of forms
+
+$("#forms_button").click(function(){
+   var FormsTopSection = document.getElementById("TargetDivshowHideForms");
+
+   if (FormsTopSection.style.display === "none") {
+   $("#TargetDivshowHideForms").show();
+   }
+   else { $("#TargetDivshowHideForms").hide();
+   }
+})
+
+//end of button click function to show/hide drop down of forms
+//start of button click function to show/hide drop down of 893
+
+$("#drop_down_show_hide_893_button").click(function(){
+   var FormsTopSection = document.getElementById("TargetDivshowHide893");
+
+   if (FormsTopSection.style.display === "none") {
+   $("#TargetDivshowHide893").show();
+
+   }
+   else { $("#TargetDivshowHide893").hide();
+   }
+})
+
+//end of button click function to show/hide drop down of 893
+//start of button click function to show/hide drop down of 894
+
+$("#drop_down_show_hide_894_button").click(function(){
+   var FormsTopSection = document.getElementById("TargetDivshowHide894");
+
+   if (FormsTopSection.style.display === "none") {
+   $("#TargetDivshowHide894").show();
+
+   }
+   else { $("#TargetDivshowHide894").hide();
+   }
+})
+
+//end of button click function to show/hide drop down of 894
+
+//start of button click function to show/hide drop down of 454
+
+$("#drop_down_show_hide_454_button").click(function(){
+   var FormsTopSection = document.getElementById("TargetDivshowHide454");
+
+   if (FormsTopSection.style.display === "none") {
+   $("#TargetDivshowHide454").show();
+
+   }
+   else { $("#TargetDivshowHide454").hide();
+   }
+})
+
+//end of button click function to show/hide drop down of 454
+
+});
+//end of on document ready
+
+
+ /* this is just kept as an example of button click javascript document.getElementById("state_selection").addEventListener("click", AddTextTest);
+
+function AddTextTest() {
+  document.getElementById("Column2").innerHTML = "in.";
+}
+*/
+
+</script>
+<h1>
+Expungement Flow Chart
+</h1>
+<p id="header">
+<a href="https://www.legis.la.gov/legis/Law.aspx?d=919667">CCRP 976 (no conviction)</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=919669">CCRP 977 (misdemeanor)</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=919670">CCRP 978 (felony)</a> | <a href="https://legis.la.gov/legis/Law.aspx?p=y&d=919678">CCRP 985.1 (interim motion to expunge felony arrest resulting in misdemeanor conviction)</a> | <a href="https://legis.la.gov/legis/Law.aspx?p=y&d=919676">CCRP 984 Additional reqs for expungement of records involving operation of vehicle while intoxicated</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=1335802">CCRP 985.2 automated expungement</a> (if funded goes into effect 1/1/2025)</br>
+<hr>
+<div class="row">
+  <div class="column" align="left"> 
+<u>Materials</u><br>
+<button id="drop_down_prosecution_sol_button" style="background-color:transparent;border:0; text-align: left;" class="Cdrop_down_prosecution_sol_button";>Title 17 Chapter 1 Institution of Prosecution Prescriptive Periods</button>
+<div id= "TargetDivshowHideSOL4Prosecution" style="display:none;">
+<ul>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?p=y&d=112620">CCRP 571 Crimes with no time limitation on prosecution</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=112621">CCRP 571.1 Sex offenses time limitation</a></li>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?d=112622">CCRP 572(A) Noncapital offenses time limitation </a> - Useful one</li>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?p=y&d=112623">CCRP 573 Running of time limitations; exceptions</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=725168">CCRP 573.1 persons with infirmities</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=1015527">CCRP 573.2 video voyeurism</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?d=1106483">CCRP 573.3 crimes against the Firefighters' Retirement System</a></li>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?d=112624">CCRP 574 Conviction and punishment for lesser offenses; limitations applicable</a></li>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?d=112625">CCRP 575 Interruption of time limitations</a> | <a href="https://www.legis.la.gov/legis/Law.aspx?p=y&d=1106484">CCRP 575.1 Suspension of time limitations; crimes against the Firefighters' Retirement System</a></li>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?d=112626">CCRP 576 Filing of new charges upon dismissal of prosecution</a></li>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?p=y&d=112627">CCRP 577 Pleading of limitation; burden of proof</a></li> 
+</ul>
+</div></br>
+<button id="drop_down_show_hide_Act78_button" style="background-color:transparent;border:0; text-align: left;" class="Cdrop_down_show_hide_Act78_button";>Act 78 (Effective 8/1/2020)</button>
+<div id="TargetDivshowHideAct78" style="display:none;">
+<ul>
+<li>(1) Repeals the prior law (C.Cr.P. Art. 977(D)) limitation on obtaining an expungement once every five years for an arrest and conviction of a misdemeanor offense and once every 10 years for a misdemeanor DWI offense. <a href="https://legis.la.gov/legis/ViewDocument.aspx?d=1185735">Act 78</a></li>
+<li>(2) Repeals the prior law (C.Cr.P. Art. 978(D)) limitation on obtaining an expungement once every 15 years for an arrest and conviction of a felony offense. <a href="https://legis.la.gov/legis/ViewDocument.aspx?d=1185735">Act 78</a></li>
+<li>New law amends prior law to limit the prohibition on filing a motion for an expungement of a record of arrest to only those persons who are in the physical custody of the Dept. of Public Safety and Corrections and serving a sentence at hard labor. <a href="https://legis.la.gov/legis/ViewDocument.aspx?d=1185735">Act 78</a></li>
+</ul>
+</div>
+<br>
+<button id="drop_down_show_hide_mar_button" style="background-color:transparent;border:0; text-align: left;" class="Cdrop_down_show_hide_mar_button";>Act 342 (Effective 8/1/2023) ~ first time offense marijuana</button>
+<div id="TargetDivshowHidemar" style="display:none;">
+<ul>
+<li><a href="https://www.legis.la.gov/legis/ViewDocument.aspx?d=1332498">Act. 342</a> LA Code Crim Pro Art. 977(D) (2023)</li>
+<li>LA Code Crim Pro Art. 977(D) Notwithstanding any provision of law to the contrary, a person may file a motion to expunge his record of arrest and conviction of a misdemeanor conviction for a first offense possession of marijuana, tetrahydrocannabinol, or chemical derivatives thereof after ninety days from the date of conviction.</li>
+</ul>
+</div>
+<br>
+<button id="drop_down_show_hide_893_button" style="background-color:transparent;border:0;text-align: left;" class="Cdrop_down_show_hide_893_button";>Art. 893 ~ suspended/deferred felony</button>
+<div id="TargetDivshowHide893" style="display:none;">
+<ul>
+<li><a href="https://legis.la.gov/legis/Law.aspx?p=y&d=112882">Art. 893. Suspension and deferral of sentence and probation in felony cases</a> LA Code Crim Pro Art. 893 (2022)</li>
+<li>LA Code Crim Pro Art. 893(E)(2) Upon motion of the defendant, if the court finds at the conclusion of the probationary period that the probation of the defendant has been satisfactory, the court may set the conviction aside and dismiss the prosecution. The dismissal of the prosecution shall have the same effect as acquittal, except that the conviction may be considered as a first offense and provide the basis for subsequent prosecution of the party as a habitual offender except as provided in R.S. 15:529.1(C)(3). The conviction may be considered as a prior offense for purposes of any other law or laws relating to cumulation of offenses. Dismissal under this Paragraph shall occur only twice with respect to any person.</li>
+<li>After a client successfully files an 893 Motion the conviction is then eligible for expungement. If the conviction was already eligible for expungement an example of when it may still be beneficial to them to first file an 893 Motion is if they are seeking employment in a field that is able to see expunged records. There is no charge to file an 893 Motion.</li>
+</ul>
+</div>
+<br>
+<button id="drop_down_show_hide_894_button" style="background-color:transparent;border:0; text-align: left;" class="Cdrop_down_show_hide_894_button";>Art. 894 ~ suspended/deferred misdemeanor</button>
+<div id="TargetDivshowHide894" style="display:none;">
+<ul>
+<li><a href="https://legis.la.gov/legis/Law.aspx?d=112888">Art. 894. Suspension and deferral of sentence; probation in misdemeanor cases</a> LA Code Crim Pro Art. 894 (2022)</li>
+<li>La Code Crim Pro Art. 894(B)(1) When the imposition of sentence has been deferred by the court, as authorized by this Article, and the court finds at the conclusion of the period of deferral that the defendant has not been convicted of any other offense during the period of the deferred sentence, and that no criminal charge is pending against him, the court may set the conviction aside and dismiss the prosecution; La Code Crim Pro Art. 894(B)(2) The dismissal of the prosecution shall have the same effect as an acquittal</li>
+<li>After a client successfully files an 894 Motion the conviction is then eligible for expungement. If the conviction was already eligible for expungement an example of when it may still be beneficial to them to first file an 894 Motion is if they are seeking employment in a field that is able to see expunged records. There is no charge to file an 894 Motion.</li>
+</ul>
+</div>
+<br>
+<button id="drop_down_show_hide_454_button" style="background-color:transparent;border:0; text-align: left;" class="Cdrop_down_show_hide_454_button";>Act 454 (Effective 1/1/2025) ~ expungement automation</button>
+<div id="TargetDivshowHide454" style="display:none;">
+<ul>
+<li><a href="https://www.legis.la.gov/legis/Law.aspx?d=1335802">Act 454 Automated expungement</a> LA Code Crim Pro Art. 985.2 (2023)</li>
+<li>La Code Crim Pro Art. 985.2(B) Beginning January 1, 2025, a defendant may submit a request through the Louisiana Bureau of Criminal Identification and Information for expungement through the automated process. The form shall contain the defendant's name, date of birth, last four digits of their social security number, arrest date, and case number. Within thirty days of receipt of the request, the Louisiana Bureau of Criminal Identification and Information shall expunge any eligible records identified in Paragraph A of this Article and shall send the records with a Case Management Information System number and final dispositions to the Louisiana Supreme Court Case Management Information System. </li>
+</ul>
+</div>
+
+</div>
+<div class="column"><u>Forms and letters</u><br>
+<button id="forms_button" style="background-color:transparent;border:0" class="Cforms_button";>Forms</button>
+<div id= "TargetDivshowHideForms" style="display:none;">
+<ul>
+<li><a href="https://drive.google.com/file/d/1NhzdXx0JxPhmiT9FV1XGV1toow229sAs/view?usp=sharing">Motion for Expungement</a></li>
+<li><a href="https://drive.google.com/file/d/1eSSR-iYk2700o0R20CMx-08zisB7rd1q/view?usp=sharing">Motion for Interim Expungement</a></li>
+<li><a href="https://drive.google.com/file/d/1gZrCp_tSHWyXlchmdAKtG9dKf5o8ZKV5/view?usp=sharing">Motion to Set Aside Conviction and Dismiss Prosecution (893/894)</a></li>
+<li><a href="https://drive.google.com/file/d/14EvDOhWdMqKVaNZr5_rYEndbqs1MgE0G/view?usp=sharing">Order</a></li>
+<li><a href="https://drive.google.com/file/d/11ubFVA1UGBjNfR6JuzFWMxFtnkHndisv/view?usp=sharing">Order of Expungement of Arrest/Conviction Record</a></li>
+<li><a href="https://drive.google.com/file/d/1nRFifwJFVncA94vFIOx2-uXSsZvLm88e/view?usp=sharing">Order of Expungement of Interim Arrest Record</a></li>
+<li><a href="https://drive.google.com/file/d/1ADqKIh2e1l_F3JJ-lMxDvSBKr-fr0i2v/view?usp=sharing">Rule to Show Cause</a></li>
+<li><a href="https://drive.google.com/file/d/1js3ZMK72QjPd-GHRa7oWF8Ml-QNnohe-/view?usp=sharing">Affidavit of Response (from DA)</a></li>
+<li><a href="https://drive.google.com/file/d/16ZoVY-Ftq10vknZjxvQaiECYEiqL4Y0E/view?usp=sharing">Transmittal of Records for Expungement of DWI (984)</a></li>
+<li><a href="https://drive.google.com/file/d/1BdsHuMqYRDevkQR1tqHBRZoEElEd8NKA/view?usp=sharing">Transmittal of Records of DWI Plea Pursuant to Art. 894</a></li>
+<li><a href="https://www.lasc.org/rules/dist.ct/COURTRULESAPPENDIX8.0.pdf">In Forma Pauperis Affidavit</a></li>
+<li><a href="https://drive.google.com/file/d/1XRyI-Igt7NQFYb6Ee0rapIy6cO_xgD5g/view?usp=sharing">Certification of Fee Waiver</a></li>
+<li><a href="https://law.justia.com/codes/louisiana/2022/code-of-criminal-procedure/article-992/">Art. 992. Order of expungement form to be used</a> (last updated 6/10/23)<br></li>
+<li><a href="https://drive.google.com/file/d/1CkjGgBhZj7MnUbtNhVzeU9NQ7ZslkIUn/view?usp=sharing">Supplemental Sheets</a></li>
+</ul>
+</div>
+<br>
+<button id="Letters_button" style="background-color:transparent;border:0" class="Cdrop_down_Letters_button";>Letters - nothing in here yet</button>
+<div id= "TargetDivshowHideLetters" style="display:none;">
+</div>
+</p>
+</div>
+</div>
+<div class="row">
+  <div class="column" style="background-color:#aaa;"> 
+<p>
+<div id="state">
+What state is the charge they are seeking an expungement on from?<br>
+	<input type="radio" id="stateinfo" name="state_selection" value="state_unknown">
+	<label for="stateinfo">unknown</label><br>
+	<input type="radio" id="Louisiana" name="state_selection" value="Louisiana_value">
+	<label for="Louisiana">Louisiana</label><br>
+	<input type="radio" id="other_state" name="state_selection" value="not_Louisiana">
+	<label for="other_state">another state</label><br>
+	<br>
+<button name="state_selection" id="state_selection">submit</button><br>
+
+</div>
+
+<div id="number_of_arrests" class="Cnumber_of_arrests" style="display:none;"><br>
+How many times have they been arrested?<br>
+
+	<input type="radio" id="arrinfo" name="arrest_quantity" value="quantity_unknown">
+	<label for="arrinfo">unknown</label><br>
+	<input type="radio" id="zero_arrests" name="arrest_quantity" value="zero_arrests_value">
+	<label for="zero_arrests">0</label><br>
+	<input type="radio" id="one_arrest" name="arrest_quantity" value="one_arrest_value">
+	<label for="one_arrest">1</label><br>
+	<input type="radio" id="two_arrests" name="arrest_quantity" value="two_arrests_value">
+	<label for="two_arrests">2</label><br>
+	<input type="radio" id="three_or_more_arrests" name="arrest_quantity" value="three_or_more_arrests_value">
+	<label for="three_or_more_arrests">3 or more</label><br>
+	<br>
+<button name="arrest_quantity" id="arrest_quantity">submit</button><br>
+
+</div>
+	
+<div id="if_incarcerated" class="Cif_incarcerated" style="display:none;"><br>
+Are they currently incarcerated and sentenced to hard labor?<br>
+<a href="https://www.legis.la.gov/legis/Law.aspx?d=919666">LA Code Crim Pro art. 975</a><br>
+	<input type="radio" id="incinfo" name="incarceration_selection" value="incarceration_status_unknown">
+	<label for="incinfo">unknown</label><br>
+	<input type="radio" id="not_incarcerated" name="incarceration_selection" value="not_incarcerated_value">
+	<label for="not_incarcerated">Not incarcerated</label><br>
+	<input type="radio" id="yes_incarcerated" name="incarceration_selection" value="incarcerated_value">
+	<label for="yes_incarcerated">Incarcerated</label><br>
+	<br>
+<button name="incarceration_selection" id="incarceration_selection">submit</button><br>
+
+</div>
+
+<div id="977DMarijuana" class="C977DMarijuana" style="display:none;"><br>
+Are they seeking to expunge a misdemeanor conviction for a first offense possession of marijuana, tetrahydrocannabinol, or chemical derivatives thereof after ninety days from the date of conviction?<br>
+	<input type="radio" id="marinfo" name="marijuana_selection" value="marinfo_unknown">
+	<label for="marinfo">unknown</label><br>
+	<input type="radio" id="not_mar" name="marijuana_selection" value="not_mar_value">
+	<label for="not_mar">No</label><br>
+	<input type="radio" id="yes_mar" name="marijuana_selection" value="incarcerated_value">
+	<label for="yes_mar">Yes</label><br>
+	<br>
+<button name="marijuana_selection" id="marijuana_selection">submit</button><br>
+
+</div>
+
+<div id="most_recent" class="Cmost_recent" style="display:none;"><br>
+Is the record they want to expunge their most recent or only arrest/conviction? <br>
+	<input type="radio" id="UUinfo" name="most_recent_inquiry" value="most_recent_unknown">
+	<label for="UUinfo">unknown</label><br>
+	<input type="radio" id="is_most_recent" name="most_recent_inquiry" value="is_most_recent_value">
+	<label for="is_most_recent">Yes</label><br>
+	<input type="radio" id="not_most_recent" name="most_recent_inquiry" value="not_most_recent_value">
+	<label for="not_most_recent">No</label><br>
+	<br>
+<button name="most_recent_inquiry" id="most_recent_inquiry">submit</button><br>
+
+</div>
+
+<div id="if_convicted" class="Cif_convicted" style="display:none;"><br>
+Were they convicted {found guilty by a judge or jury, pled guilty, received a jail or prison sentence, probation, paid a fine, were sentenced to a diversion program that wasn't completed successfully, pled <a href="https://legaldictionary.net/no-contest/">no contest</a>, pled <a href="https://legaldictionary.net/nolo-contendere/">nolo contendre</a>, pled under an <a href="https://legaldictionary.net/alford-plea/">Alford plea</a>}?<br>
+	<input type="radio" id="if_con_info" name="if_convicted_inquiry" value="if_convicted_unknown">
+	<label for="if_con_info">unknown</label><br>
+	<input type="radio" id="yes_convicted" name="if_convicted_inquiry" value="yes_convicted_value">
+	<label for="yes_convicted">Yes</label><br>
+	<input type="radio" id="not_convicted" name="if_convicted_inquiry" value="not_convicted_value">
+	<label for="not_convicted">No</label><br>
+	<br>
+<button name="if_convicted_inquiry" id="if_convicted_inquiry">submit</button><br>
+
+</div>
+
+<div id="charge_type" class="Ccharge_type" style="display:none;"><br>
+Is the charge they want to expunge a felony or a misdemeanor? Typical felonies as defined in <a href="https://www.legis.la.gov/legis/Law.aspx?d=78337">RS §14:2(A)(4)</a> are offenses where the sentence will include the phrases "with or without hard labor," "at hard labor," or "death or life imprisonment at hard labor." Misdemeanors are anything that isn't a felony (but includes up to 2 years of probation).<br>
+	<input type="radio" id="ChargeInfo" name="charge_cat" value="cat_unknown">
+	<label for="info">unknown</label><br>
+	<input type="radio" id="felony" name="charge_cat" value="felony_value">
+	<label for="felony">felony</label><br>
+	<input type="radio" id="misdemeanor" name="charge_cat" value="misdemeanor_value">
+	<label for="misdemeanor">misdemeanor</label><br>
+<br>
+<button name="charge_cat" id="charge_cat">submit</button><br>
+</div>
+
+<div id="crime_of_violence" class="Ccrime_of_violence" style="display:none;"><br>
+Were they convicted of a Crime of Violence (a crime listed under <a href="https://www.legis.la.gov/legis/Law.aspx?d=78337">La. Rev. Stat. Ann. 14:2B)?</a><br>
+	<input type="radio" id="CrimeOfViolenceInfo" name="crime_of_vio" value="crime_of_vio_unknown">
+	<label for="CrimeOfViolenceInfo">unknown</label><br>
+	<input type="radio" id="yes_crime_of_violence" name="crime_of_vio" value="yes_crime_of_vio_value">
+	<label for="yes_crime_of_violence">yes</label><br>
+	<input type="radio" id="not_crime_of_violence" name="crime_of_vio" value="not_crime_of_vio_value">
+	<label for="not_crime_of_violence">no</label><br>
+<br>
+<button name="crime_of_vio" id="crime_of_vio">submit</button><br>
+</div>
+
+<div id="sex_offender" class="Csex_offender" style="display:none;"><br>
+Are or were they required to register as a sex offender because they were convicted of a crime defined as a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79161">sex offense?</a><br>
+<input type="radio" id="SexOffenseInfo" name="sex_offense_crime" value="sex_offense_unknown">
+<label for="SexOffenseInfo">unknown</label><br>
+<input type="radio" id="yes_sex_offense" name="sex_offense_crime" value="yes_sex_offense_value">
+<label for="yes_sex_offense">yes</label><br>
+<input type="radio" id="not_sex_offense" name="sex_offense_crime" value="not_sex_offense_value">
+<label for="not_sex_offense">no</label><br>
+<br>
+<button name="sex_offense_crime" id="sex_offense_crime">submit</button><br>
+</div>
+
+<div id="under_17" class="Cunder_17" style="display:none;"><br>
+Did the charges involve a child under 18 (<a href="https://www.legis.la.gov/legis/Law.aspx?p=y&d=79160">Louisiana Revised Statutes section 15:541(12)</a>?<br>
+<input type="radio" id="under17Info" name="under17_crime" value="under17_crime_unknown">
+<label for="under17Info">unknown</label><br>
+<input type="radio" id="yes_under17" name="under17_crime" value="yes_under17_value">
+<label for="yes_under17">yes</label><br>
+<input type="radio" id="not_under17" name="under17_crime" value="not_under17_value">
+<label for="not_under17">no</label><br>
+<br>
+<button name="under17_crime" id="under17_crime">submit</button><br>
+</div>
+
+<div id="distribution_substance"class="Cdistribution_substance" style="display:none;"><br>
+Were they convicted of distribution or attempted distribution of a controlled dangerous substance, not including Possession With Intent to distribute (PWI)?<br>
+<input type="radio" id="DistribInfo" name="distrib_crime" value="distrib_crime_unknown">
+<label for="DistribInfo">unknown</label><br>
+<input type="radio" id="yes_distrib" name="distrib_crime" value="yes_distrib_value">
+<label for="yes_distrib">yes</label><br>
+<input type="radio" id="not_distrib" name="distrib_crime" value="not_distrib_value">
+<label for="not_distrib">no</label><br>
+<br>
+<button name="distrib_crime" id="distrib_crime">submit</button><br>
+</div>
+
+<div id="first_offender_Pardon" class="C1st_offender_Pardon" style="display:none;"><br>
+Did they receive a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79202">First Offender Pardon</a> letter after completion of sentence? The First Offender Pardon Letter is automatic for a first felony conviction (if not a crime of violence or sex offense) if the court costs were paid.<br>
+<input type="radio" id="PardonLetterInfo" name="1st_offender_pardon_letter" value="pardon_unknown">
+<label for="PardonLetterInfo">unknown</label><br>
+<input type="radio" id="yes_Pardon" name="1st_offender_pardon_letter" value="yes_pardon_value">
+<label for="yes_Pardon">yes</label><br>
+<input type="radio" id="no_Pardon" name="1st_offender_pardon_letter" value="no_pardon_value">
+<label for="no_Pardon">no</label><br>
+<br>
+<button name="1st_offender_pardon_letter" id="1st_offender_pardon_letter">submit</button><br>
+</div>
+
+<div id="div_article893E" class="C_art893E" style="display:none;"><br>
+Were they convicted under <a href="https://www.legis.la.gov/legis/Law.aspx?d=112882">Article 893E</a> to a deferred sentence (probation only)? On the minutes or background check look for the word “DEFERRED.” It is possible to have an 893 “SUSPENDED” sentence. If the minutes say “SUSPENDED” select NO.<br>
+<input type="radio" id="Article893EInfo" name="893E" value="893E_unknown">
+<label for="Article893EInfo">unknown</label><br>
+<input type="radio" id="yes_893E" name="893E" value="yes_893E_value">
+<label for="yes_893E">yes</label><br>
+<input type="radio" id="no_893E" name="893E" value="no_893E_value">
+<label for="no_893E">no</label><br>
+<br>
+<button name="893E" id="893E">submit</button><br>
+</div>
+
+<div id="probation_completed" class="Cprobation_completed" style="display:none;"><br>
+Was probation completed satisfactorily? “Satisfactorily Completed” means (1) probation was NOT revoked and/or (2) they did not return or spend time in jail after they were sentenced, and/or (3) they did NOT have a hearing where the judge terminated them UNSATISFACTORILY due to payments or violations. <br>
+<input type="radio" id="probationInfo" name="probation" value="probation_unknown">
+<label for="probationInfo">unknown</label><br>
+<input type="radio" id="yes_probation" name="probation" value="yes_probation_value">
+<label for="yes_probation">yes</label><br>
+<input type="radio" id="no_probation" name="probation" value="no_probation_value">
+<label for="no_probation">no</label><br>
+<br>
+<button name="probation" id="probation">submit</button><br>
+</div>
+
+<div id="div_2nd_first_offender_pardon_letter" class="C2nd_1st_offender_pardon" style="display:none;"><br>
+Did they receive a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79202">First Offender Pardon</a> letter after completion of sentence? The First Offender Pardon Letter is automatic for a first felony conviction (if not a crime of violence or sex offense) if the court costs were paid.<br>
+<input type="radio" id="2ndPardonLetterInfo" name="2nd_1st_offender_pardon_letter" value="2ndpardon_unknown">
+<label for="2ndPardonLetterInfo">unknown</label><br>
+<input type="radio" id="2ndyes_Pardon" name="2nd_1st_offender_pardon_letter" value="2ndyes_pardon_value">
+<label for="2ndyes_Pardon">yes</label><br>
+<input type="radio" id="2ndno_Pardon" name="2nd_1st_offender_pardon_letter" value="2ndno_pardon_value">
+<label for="2ndno_Pardon">no</label><br>
+<br>
+<button name="2nd_1st_offender_pardon_letter" id="2nd_1st_offender_pardon_letter">submit</button><br>
+</div>
+
+<div id="div_3rd_first_offender_pardon_letter" class="C3rd_1st_offender_pardon" style="display:none;"<br><br>
+Did they receive a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79202">First Offender Pardon</a> letter after completion of sentence? The First Offender Pardon Letter is automatic for a first felony conviction (if not a crime of violence or sex offense) if the court costs were paid.<br>
+<input type="radio" id="3rdPardonLetterInfo" name="3rd_1st_offender_pardon_letter" value="3rdpardon_unknown">
+<label for="3rdPardonLetterInfo">unknown</label><br>
+<input type="radio" id="3rdyes_Pardon" name="3rd_1st_offender_pardon_letter" value="3rdyes_pardon_value">
+<label for="3rdyes_Pardon">yes</label><br>
+<input type="radio" id="3rdno_Pardon" name="3rd_1st_offender_pardon_letter" value="3rdno_pardon_value">
+<label for="3rdno_Pardon">no</label><br>
+<br>
+<button name="3rd_1st_offender_pardon_letter" id="3rd_1st_offender_pardon_letter">submit</button><br>
+</div>
+
+<div id="10Years" class="C10years" style="display:none;"><br>
+Has it been 10 years since completion of the sentence?<br>
+	<input type="radio" id="10yrinfo" name="10_years" value="10_years_unknown">
+	<label for="10yrinfo">unknown</label><br>
+	<input type="radio" id="not_10_years" name="10_years" value="not_10_years_value">
+	<label for="not_10_years">no</label><br>
+	<input type="radio" id="yes_10_years" name="10_years" value="yes_10_years_value">
+	<label for="yes_10_years">yes</label><br>
+	<br>
+<button name="10_years" id="10_years">submit</button><br>
+</div>
+
+<div id="more_recent_felony" class="Cmore_recent_felony" style="display:none;"><br>
+Have they been convicted of a felony with a sentence the terms of which are either not yet completed, or completed within the last five years?<br>
+	<input type="radio" id="recentFinfo" name="recent_felony" value="recent_felony_unknown">
+	<label for="recentFinfo">unknown</label><br>
+	<input type="radio" id="not_recent_felony" name="recent_felony" value="not_recent_felony_value">
+	<label for="not_recent_felony">no</label><br>
+	<input type="radio" id="yes_recent_felony" name="recent_felony" value="yes_recent_felony_value">
+	<label for="yes_recent_felony">yes</label><br>
+	<br>
+<button name="recent_felony" id="recent_felony">submit</button><br>
+
+</div>
+
+<div id="div_DV" class="C_DV" style="display:none;"><br>
+Did the misdemeanor charge for which they are seeking expungement arise out of a domestic violence arrest?<br>
+	<input type="radio" id="DVinfo" name="DV" value="DV_unknown">
+	<label for="DVinfo">unknown</label><br>
+	<input type="radio" id="not_DV" name="DV" value="not_DV_value">
+	<label for="not_DV">no</label><br>
+	<input type="radio" id="yes_DV" name="DV" value="yes_DV_value">
+	<label for="yes_DV">yes</label><br>
+	<br>
+<button name="DV" id="DV">submit</button><br>
+
+</div>
+
+<div id="div_Abuse" class="C_abuse" style="display:none;"><br>
+Were they convicted of Domestic Abuse Battery or Stalking?<br>
+	<input type="radio" id="abuseinfo" name="abuse" value="abuse_unknown">
+	<label for="abuseinfo">unknown</label><br>
+	<input type="radio" id="not_abuse" name="abuse" value="not_abuse_value">
+	<label for="not_abuse">no</label><br>
+	<input type="radio" id="yes_abuse" name="abuse" value="yes_abuse_value">
+	<label for="yes_abuse">yes</label><br>
+	<br>
+<button name="abuse" id="abuse">submit</button><br>
+
+</div>
+
+<div id="div_894" class="C894" style="display:none;"><br>
+If they pled to a reduced charge (NOT domestic abuse), were they given a deferred sentence of probation under <a href="https://www.legis.la.gov/legis/Law.aspx?d=112888">894</a>?<br>
+	<input type="radio" id="894info" name="894" value="894_unknown">
+	<label for="894info">unknown</label><br>
+	<input type="radio" id="not_894" name="894" value="not_894_value">
+	<label for="not_894">no</label><br>
+	<input type="radio" id="yes_894" name="894" value="yes_894_value">
+	<label for="yes_894">yes</label><br>
+	<br>
+<button name="894" id="894">submit</button><br>
+
+</div>
+
+<div id="2ndprobation_completed" class="C2ndprobation_completed" style="display:none;"><br>
+Was probation completed satisfactorily? “Satisfactorily Completed” means (1) probation was NOT revoked and/or (2) they did not return or spend time in jail after they were sentenced, and/or (3) they did NOT have a hearing where the judge terminated them UNSATISFACTORILY due to payments or violations. <br>
+<input type="radio" id="2ndprobationInfo" name="2ndprobation" value="2ndprobation_unknown">
+<label for="2ndprobationInfo">unknown</label><br>
+<input type="radio" id="2ndyes_probation" name="2ndprobation" value="2ndyes_probation_value">
+<label for="2ndyes_probation">yes</label><br>
+<input type="radio" id="2ndno_probation" name="2ndprobation" value="2ndno_probation_value">
+<label for="2ndno_probation">no</label><br>
+<br>
+<button name="2ndprobation" id="2ndprobation">submit</button><br>
+</div>
+
+<div id="2ndsex_offender" class="C2ndsex_offender" style="display:none;"><br>
+Are or were they required to register as a sex offender because they were convicted of a crime defined as a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79161">sex offense?</a><br>
+<input type="radio" id="2ndSexOffenseInfo" name="2ndsex_offense_crime" value="2ndsex_offense_unknown">
+<label for="2ndSexOffenseInfo">unknown</label><br>
+<input type="radio" id="2ndyes_sex_offense" name="2ndsex_offense_crime" value="2ndyes_sex_offense_value">
+<label for="2ndyes_sex_offense">yes</label><br>
+<input type="radio" id="2ndnot_sex_offense" name="2ndsex_offense_crime" value="2ndnot_sex_offense_value">
+<label for="2ndnot_sex_offense">no</label><br>
+<br>
+<button name="2ndsex_offense_crime" id="2ndsex_offense_crime">submit</button><br>
+</div>
+
+<div id="div_2nd_894" class="C2nd_894" style="display:none;"><br>
+Were they given a deferred sentence of probation under <a href="https://www.legis.la.gov/legis/Law.aspx?d=112888">894</a>?<br>
+	<input type="radio" id="2nd894info" name="2nd894" value="2nd894_unknown">
+	<label for="2nd894info">unknown</label><br>
+	<input type="radio" id="2ndnot_894" name="2nd894" value="2ndnot_894_value">
+	<label for="2ndnot_894">no</label><br>
+	<input type="radio" id="2ndyes_894" name="2nd894" value="2ndyes_894_value">
+	<label for="2ndyes_894">yes</label><br>
+	<br>
+<button name="2nd894" id="2nd894">submit</button><br>
+</div>
+
+<div id="div_3rdprobation_completed" class="C3rdprobation_completed" style="display:none;"><br>
+Was probation completed satisfactorily? “Satisfactorily Completed” means (1) probation was NOT revoked and/or (2) they did not return or spend time in jail after they were sentenced, and/or (3) they did NOT have a hearing where the judge terminated them UNSATISFACTORILY due to payments or violations. <br>
+<input type="radio" id="3rdprobationInfo" name="3rdprobation" value="3rdprobation_unknown">
+<label for="3rdprobationInfo">unknown</label><br>
+<input type="radio" id="3rdyes_probation" name="3rdprobation" value="3rdyes_probation_value">
+<label for="3rdyes_probation">yes</label><br>
+<input type="radio" id="3rdno_probation" name="3rdprobation" value="3rdno_probation_value">
+<label for="3rdno_probation">no</label><br>
+<br>
+<button name="3rdprobation" id="3rdprobation">submit</button><br>
+</div>
+
+<div id="Div_Prosecution_Outcome" class="CProsecution_Outcome" style="display:none;"><br>
+How did the prosecution end?<br>
+<input type="radio" id="Prosec_Outcome_Info" name="Prosecution_Outcome" value="Prosec_Outcome_unknown">
+<label for="Prosec_Outcome_Info">unknown</label><br>
+<input type="radio" id="Not_Guilty_or_Quashed" name="Prosecution_Outcome" value="Not_Guilty_or_Quashed_value">
+<label for="Not_Guilty_or_Quashed">Not Guilty or Quashed</label><br>
+<input type="radio" id="DA_Refused_or_Dismissed" name="Prosecution_Outcome" value="DA_Refused_or_Dismissed_value">
+<label for="DA_Refused_or_Dismissed">DA Refused or Dismissed</label><br>
+<input type="radio" id="Successful_Diversion" name="Prosecution_Outcome" value="Successful_Diversion_value">
+<label for="Successful_Diversion">Successful Diversion</label><br>
+<input type="radio" id="Sex_Offense_Not_Charged" name="Prosecution_Outcome" value="Sex_Offense_Not_Charged_value">
+<label for="Sex_Offense_Not_Charged">Sex Offense, not charged</label><br>
+<input type="radio" id="Life_Imprisonment" name="Prosecution_Outcome" value="Life_Imprisonment_value">
+<label for="Life_Imprisonment">Charge Penalty was Life Imprisonment</label><br>
+<input type="radio" id="Case_Still_Open_Pending" name="Prosecution_Outcome" value="Case_Still_Open_Pending_value">
+<label for="Case_Still_Open_Pending">Case Still Open, Still Pending</label><br>
+<br>
+<button name="Prosecution_Outcome" id="Prosecution_Outcome">submit</button><br>
+</div>
+
+<div id="div_diversion_DUI" class="Cdiversion_DUI" style="display:none;"><br>
+Did the diversion program arise from a DUI arrest?<br>
+	<input type="radio" id="DUIinfo" name="diversion_DUI" value="DUI_unknown">
+	<label for="DUIinfo">unknown</label><br>
+	<input type="radio" id="not_DUI" name="diversion_DUI" value="not_DUI_value">
+	<label for="not_DUI">no</label><br>
+	<input type="radio" id="yes_DUI" name="diversion_DUI" value="yes_DUI_value">
+	<label for="yes_DUI">yes</label><br>
+	<br>
+<button name="diversion_DUI" id="diversion_DUI">submit</button><br>
+
+</div>
+<div id="div_diversion_comp"  class="Cdiversion_comp" style="display:none;"><br>
+Was the diversion program completed successfully?<br>
+	<input type="radio" id="diversioninfo" name="diversion_comp" value="diversion_comp_unknown">
+	<label for="diversioninfo">unknown</label><br>
+	<input type="radio" id="not_diversion_comp" name="diversion_comp" value="not_diversion_comp_value">
+	<label for="not_diversion_comp">no</label><br>
+	<input type="radio" id="yes_diversion_comp" name="diversion_comp" value="yes_diversion_comp_value">
+	<label for="yes_diversion_comp">yes</label><br>
+	<br>
+<button name="diversion_comp" id="diversion_comp">submit</button><br>
+
+</div>
+<div id="div_true_bill" class="Ctrue_bill" style="display:none;"><br>
+Was a <a href="https://www.law.cornell.edu/wex/true_bill">True Bill</a> filed against them?<br>
+	<input type="radio" id="true_bill_info" name="true_bill" value="true_bill_unknown">
+	<label for="true_bill_info">unknown</label><br>
+	<input type="radio" id="no_true_bill" name="true_bill" value="no_true_bill_value">
+	<label for="no_true_bill">no</label><br>
+	<input type="radio" id="yes_true_bill" name="true_bill" value="yes_true_bill_value">
+	<label for="yes_true_bill">yes</label><br>
+	<br>
+<button name="true_bill" id="true_bill">submit</button><br>
+
+</div>
+<div id="2ndif_convicted" class="C2ndif_convicted" style="display:none;"><br>
+Were they convicted {found guilty by a judge or jury, pled guilty, received a jail or prison sentence, probation, paid a fine, were sentenced to a diversion program that wasn't completed successfully, pled <a href="https://legaldictionary.net/no-contest/">no contest</a>, pled <a href="https://legaldictionary.net/nolo-contendere/">nolo contendre</a>, pled under an <a href="https://legaldictionary.net/alford-plea/">Alford plea</a>}?<br>
+	<input type="radio" id="2nd_most_recent_info" name="2ndif_convicted_inquiry" value="2ndif_convicted_unknown">
+	<label for="2nd_most_recent_info">unknown</label><br>
+	<input type="radio" id="2ndyes_convicted" name="2ndif_convicted_inquiry" value="2ndyes_convicted_value">
+	<label for="2ndyes_convicted">Yes</label><br>
+	<input type="radio" id="2ndnot_convicted" name="2ndif_convicted_inquiry" value="2ndnot_convicted_value">
+	<label for="2ndnot_convicted">No</label><br>
+	<br>
+<button name="2ndif_convicted_inquiry" id="2ndif_convicted_inquiry">submit</button><br>
+
+</div>
+<div id="2ndcharge_type" class="C2ndcharge_type" style="display:none;"><br>
+Is the charge they want to expunge a felony or a misdemeanor? Typical felonies as defined in <a href="https://www.legis.la.gov/legis/Law.aspx?d=78337">RS §14:2(A)(4)</a> are offenses where the sentence will include the phrases "with or without hard labor," "at hard labor," or "death or life imprisonment at hard labor." Misdemeanors are anything that isn't a felony (but includes up to 2 years of probation).<br>
+	<input type="radio" id="2ndChargeInfo" name="2ndcharge_cat" value="2ndcat_unknown">
+	<label for="2ndChargeinfo">unknown</label><br>
+	<input type="radio" id="2ndfelony" name="2ndcharge_cat" value="2ndfelony_value">
+	<label for="2ndfelony">felony</label><br>
+	<input type="radio" id="2ndmisdemeanor" name="2ndcharge_cat" value="2ndmisdemeanor_value">
+	<label for="2ndmisdemeanor">misdemeanor</label><br>
+<br>
+<button name="2ndcharge_cat" id="2ndcharge_cat">submit</button><br>
+</div>
+
+<div id="div_subsequent_conviction" class="Csubsequent_conviction" style="display:none;"><br>
+Have they been convicted of a more recent felony or misdemeanor in the last ten years?<br>
+	<input type="radio" id="SubConInfo" name="subsequent_conviction" value="SubCon_unknown">
+	<label for="SubConinfo">unknown</label><br>
+	<input type="radio" id="yes_SubCon" name="subsequent_conviction" value="yes_SubCon_value">
+	<label for="yes_SubCon">yes</label><br>
+	<input type="radio" id="no_SubCon" name="subsequent_conviction" value="no_SubCon_value">
+	<label for="no_SubCon">no</label><br>
+<br>
+<button name="subsequent_conviction" id="subsequent_conviction">submit</button><br>
+</div>
+<div id="2ndcrime_of_violence" class="C2ndcrime_of_violence" style="display:none;"><br>
+Were they convicted of a Crime of Violence (a crime listed under <a href="https://www.legis.la.gov/legis/Law.aspx?d=78337">La. Rev. Stat. Ann. 14:2B)?</a><br>
+	<input type="radio" id="2ndCrimeOfViolenceInfo" name="2ndcrime_of_vio" value="2ndcrime_of_vio_unknown">
+	<label for="2ndCrimeOfViolenceInfo">unknown</label><br>
+	<input type="radio" id="2ndyes_crime_of_violence" name="2ndcrime_of_vio" value="2ndyes_crime_of_vio_value">
+	<label for="2ndyes_crime_of_violence">yes</label><br>
+	<input type="radio" id="2ndnot_crime_of_violence" name="2ndcrime_of_vio" value="2ndnot_crime_of_vio_value">
+	<label for="2ndnot_crime_of_violence">no</label><br>
+<br>
+<button name="2ndcrime_of_vio" id="2ndcrime_of_vio">submit</button><br>
+</div>
+
+<div id="3rdsex_offender" class="C3rdsex_offender" style="display:none;"><br>
+Are or were they required to register as a sex offender because they were convicted of a crime defined as a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79161">sex offense?</a><br>
+<input type="radio" id="3rdSexOffenseInfo" name="3rdsex_offense_crime" value="3rdsex_offense_unknown">
+<label for="3rdSexOffenseInfo">unknown</label><br>
+<input type="radio" id="3rdyes_sex_offense" name="3rdsex_offense_crime" value="3rdyes_sex_offense_value">
+<label for="3rdyes_sex_offense">yes</label><br>
+<input type="radio" id="3rdnot_sex_offense" name="3rdsex_offense_crime" value="3rdnot_sex_offense_value">
+<label for="3rdnot_sex_offense">no</label><br>
+<br>
+<button name="3rdsex_offense_crime" id="3rdsex_offense_crime">submit</button><br>
+</div>
+
+<div id="2ndunder_17" class="C2ndunder_17" style="display:none;"><br>
+Did the charges involve a child under 17?<br>
+<input type="radio" id="2ndunder17Info" name="2ndunder17_crime" value="2ndunder17_crime_unknown">
+<label for="2ndunder17Info">unknown</label><br>
+<input type="radio" id="2ndyes_under17" name="2ndunder17_crime" value="2ndyes_under17_value">
+<label for="2ndyes_under17">yes</label><br>
+<input type="radio" id="2ndnot_under17" name="2ndunder17_crime" value="2ndnot_under17_value">
+<label for="2ndnot_under17">no</label><br>
+<br>
+<button name="2ndunder17_crime" id="2ndunder17_crime">submit</button><br>
+</div>
+
+<div id="2nddistribution_substance" class="C2nddistribution_substance" style="display:none;"><br>
+Were they convicted of distribution or attempted distribution of a controlled dangerous substance? This does not include Possession With Intent to distribute (PWI).<br>
+<input type="radio" id="2ndDistribInfo" name="2nddistrib_crime" value="2nddistrib_crime_unknown">
+<label for="2ndDistribInfo">unknown</label><br>
+<input type="radio" id="2ndyes_distrib" name="2nddistrib_crime" value="2ndyes_distrib_value">
+<label for="2ndyes_distrib">yes</label><br>
+<input type="radio" id="2ndnot_distrib" name="2nddistrib_crime" value="2ndnot_distrib_value">
+<label for="2ndnot_distrib">no</label><br>
+<br>
+<button name="2nddistrib_crime" id="2nddistrib_crime">submit</button><br>
+</div>
+
+<div id="4thfirst_offender_Pardon" class="C4th1st_offender_Pardon" style="display:none;"><br>
+Did they receive a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79202">First Offender Pardon</a> letter after completion of sentence? The First Offender Pardon Letter is automatic for a first felony conviction (if not a crime of violence or sex offense) if the court costs were paid.<br>
+<input type="radio" id="4thPardonLetterInfo" name="4th1st_offender_pardon_letter" value="4thpardon_unknown">
+<label for="4thPardonLetterInfo">unknown</label><br>
+<input type="radio" id="4thyes_Pardon" name="4th1st_offender_pardon_letter" value="4thyes_pardon_value">
+<label for="4thyes_Pardon">yes</label><br>
+<input type="radio" id="4thno_Pardon" name="4th1st_offender_pardon_letter" value="4thno_pardon_value">
+<label for="4thno_Pardon">no</label><br>
+<br>
+<button name="4th1st_offender_pardon_letter" id="4th1st_offender_pardon_letter">submit</button><br>
+</div>
+<div id="div_2nd893E"  class="C2nd893E" style="display:none;"><br>
+Were they convicted under <a href="https://legis.la.gov/legis/Law.aspx?d=112882">Article 893E</a> to a deferred sentence (probation only)? On the minutes and/or background check look for the word “DEFERRED.” There's an 893 “SUSPENDED” sentence too, but if the minutes say “SUSPENDED” select NO.<br>
+<input type="radio" id="2ndArticle893EInfo" name="2nd893E" value="2nd893E_unknown">
+<label for="2ndArticle893EInfo">unknown</label><br>
+<input type="radio" id="2ndyes_893E" name="2nd893E" value="2ndyes_893E_value">
+<label for="2ndyes_893E">yes</label><br>
+<input type="radio" id="2ndno_893E" name="2nd893E" value="2ndno_893E_value">
+<label for="2ndno_893E">no</label><br>
+<br>
+<button name="2nd893E" id="2nd893E">submit</button><br>
+</div>
+
+<div id="4thprobation_completed" class="C4thprobation_completed" style="display:none;"><br>
+Was probation completed satisfactorily? “Satisfactorily Completed” means (1) probation was NOT revoked and/or (2) they did not return or spend time in jail after they were sentenced, and/or (3) they did NOT have a hearing where the judge terminated them UNSATISFACTORILY due to payments or violations. <br>
+<input type="radio" id="4thprobationInfo" name="4thprobation" value="4thprobation_unknown">
+<label for="4thprobationInfo">unknown</label><br>
+<input type="radio" id="4thyes_probation" name="4thprobation" value="4thyes_probation_value">
+<label for="4thyes_probation">yes</label><br>
+<input type="radio" id="4thno_probation" name="4thprobation" value="4thno_probation_value">
+<label for="4thno_probation">no</label><br>
+<br>
+<button name="4thprobation" id="4thprobation">submit</button><br>
+</div>
+
+<div id="div_5th_first_offender_pardon" class="C5th1stoffenderPardon" style="display:none;"><br>
+Did they receive a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79202">First Offender Pardon</a> letter after completion of sentence? The First Offender Pardon Letter is automatic for a first felony conviction (if not a crime of violence or sex offense) if the court costs were paid.<br>
+<input type="radio" id="5thPardonLetterInfo" name="5th_1st_offender_pardon_letter" value="5thpardon_unknown">
+<label for="5thPardonLetterInfo">unknown</label><br>
+<input type="radio" id="5thyes_Pardon" name="5th_1st_offender_pardon_letter" value="5thyes_pardon_value">
+<label for="5thyes_Pardon">yes</label><br>
+<input type="radio" id="5thno_Pardon" name="5th_1st_offender_pardon_letter" value="5thno_pardon_value">
+<label for="5thno_Pardon">no</label><br>
+<br>
+<button name="5th_1st_offender_pardon_letter" id="5th_1st_offender_pardon_letter">submit</button><br>
+</div>
+
+<div id="div_6th_first_offender_pardon" class="C6th1stoffenderPardon" style="display:none;"><br>
+Did they receive a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79202">First Offender Pardon</a> letter after completion of sentence? The First Offender Pardon Letter is automatic for a first felony conviction (if not a crime of violence or sex offense) if the court costs were paid.<br>
+<input type="radio" id="6thPardonLetterInfo" name="6th_1st_offender_pardon_letter" value="6thpardon_unknown">
+<label for="6thPardonLetterInfo">unknown</label><br>
+<input type="radio" id="6thyes_Pardon" name="6th_1st_offender_pardon_letter" value="6thyes_pardon_value">
+<label for="6thyes_Pardon">yes</label><br>
+<input type="radio" id="6thno_Pardon" name="6th_1st_offender_pardon_letter" value="6thno_pardon_value">
+<label for="6thno_Pardon">no</label><br>
+<br>
+<button name="6th_1st_offender_pardon_letter" id="6th_1st_offender_pardon_letter">submit</button><br>
+</div>
+
+<div id="2nd10Years"  class="C2nd10Years" style="display:none;"><br>
+Has it been 10 years since completion of the sentence?<br>
+	<input type="radio" id="2nd10yrinfo" name="2nd10_years" value="2nd10_years_unknown">
+	<label for="2nd10yrinfo">unknown</label><br>
+	<input type="radio" id="2ndnot_10_years" name="2nd10_years" value="2ndnot_10_years_value">
+	<label for="2ndnot_10_years">no</label><br>
+	<input type="radio" id="2ndyes_10_years" name="2nd10_years" value="2ndyes_10_years_value">
+	<label for="2ndyes_10_years">yes</label><br>
+	<br>
+<button name="2nd10_years" id="2nd10_years">submit</button><br>
+</div>
+
+<div id="div_3rdmore_recent_felony" class="C3rdmore_recent_felony" style="display:none;"><br>
+Have they been convicted of a more recent felony?<br>
+	<input type="radio" id="3rdrecentFinfo" name="3rdrecent_felony" value="3rdrecent_felony_unknown">
+	<label for="3rdrecentFinfo">unknown</label><br>
+	<input type="radio" id="3rdnot_recent_felony" name="3rdrecent_felony" value="3rdnot_recent_felony_value">
+	<label for="3rdnot_recent_felony">no</label><br>
+	<input type="radio" id="3rdyes_recent_felony" name="3rdrecent_felony" value="3rdyes_recent_felony_value">
+	<label for="3rdyes_recent_felony">yes</label><br>
+	<br>
+<button name="3rdrecent_felony" id="3rdrecent_felony">submit</button><br>
+</div>
+
+<div id="div_2ndDV" class="C2ndDV" style="display:none;"><br>
+Did the charge arise out of a domestic violence arrest?<br>
+	<input type="radio" id="2ndDVinfo" name="2ndDV" value="2ndDV_unknown">
+	<label for="2ndDVinfo">unknown</label><br>
+	<input type="radio" id="2ndnot_DV" name="2ndDV" value="2ndnot_DV_value">
+	<label for="2ndnot_DV">no</label><br>
+	<input type="radio" id="2ndyes_DV" name="2ndDV" value="2ndyes_DV_value">
+	<label for="2ndyes_DV">yes</label><br>
+	<br>
+<button name="2ndDV" id="2ndDV">submit</button><br>
+</div>
+
+<div id="div_2ndAbuse" class="C2ndAbuse" style="display:none;"><br>
+Were they convicted of Domestic Abuse Battery or Stalking?<br>
+	<input type="radio" id="2ndabuseinfo" name="2ndabuse" value="2ndabuse_unknown">
+	<label for="2ndabuseinfo">unknown</label><br>
+	<input type="radio" id="2ndnot_abuse" name="2ndabuse" value="2ndnot_abuse_value">
+	<label for="2ndnot_abuse">no</label><br>
+	<input type="radio" id="2ndyes_abuse" name="2ndabuse" value="2ndyes_abuse_value">
+	<label for="2ndyes_abuse">yes</label><br>
+	<br>
+<button name="2ndabuse" id="2ndabuse">submit</button><br>
+</div>
+
+<div id="div_3rd_894" class="C3rd894" style="display:none;"><br>
+If they pled to a reduced charge (NOT domestic abuse), were they given a deferred sentence of probation under <a href="https://www.legis.la.gov/legis/Law.aspx?d=112888">894</a>?<br>
+	<input type="radio" id="3rd894info" name="3rd894" value="3rd894_unknown">
+	<label for="3rd894info">unknown</label><br>
+	<input type="radio" id="3rdnot_894" name="3rd894" value="3rdnot_894_value">
+	<label for="3rdnot_894">no</label><br>
+	<input type="radio" id="3rdyes_894" name="3rd894" value="3rdyes_894_value">
+	<label for="3rdyes_894">yes</label><br>
+	<br>
+<button name="3rd894" id="3rd894">submit</button><br>
+</div>
+
+<div id="5thprobation_completed" class="C5thprobation_completed" style="display:none;"><br>
+Was probation completed satisfactorily? “Satisfactorily Completed” means (1) probation was NOT revoked and/or (2) they did not return or spend time in jail after they were sentenced, and/or (3) they did NOT have a hearing where the judge terminated them UNSATISFACTORILY due to payments or violations. <br>
+<input type="radio" id="5thprobationInfo" name="5thprobation" value="5thprobation_unknown">
+<label for="5thprobationInfo">unknown</label><br>
+<input type="radio" id="5thyes_probation" name="5thprobation" value="5thyes_probation_value">
+<label for="5thyes_probation">yes</label><br>
+<input type="radio" id="5thno_probation" name="5thprobation" value="5thno_probation_value">
+<label for="5thno_probation">no</label><br>
+<br>
+<button name="5thprobation" id="5thprobation">submit</button><br>
+</div>
+
+<div id="4thsex_offender" class="C4thsex_offender" style="display:none;"><br>
+Are or were they required to register as a sex offender because they were convicted of a crime defined as a <a href="https://www.legis.la.gov/legis/Law.aspx?d=79161">sex offense?</a><br>
+<input type="radio" id="4thSexOffenseInfo" name="4thsex_offense_crime" value="4thsex_offense_unknown">
+<label for="4thSexOffenseInfo">unknown</label><br>
+<input type="radio" id="4thyes_sex_offense" name="4thsex_offense_crime" value="4thyes_sex_offense_value">
+<label for="4thyes_sex_offense">yes</label><br>
+<input type="radio" id="4thnot_sex_offense" name="4thsex_offense_crime" value="4thnot_sex_offense_value">
+<label for="4thnot_sex_offense">no</label><br>
+<br>
+<button name="4thsex_offense_crime" id="4thsex_offense_crime">submit</button><br>
+</div>
+
+<div id="div_4th894" class="C4th894" style="display:none;"><br>
+Were they given a deferred sentence of probation under <a href="https://www.legis.la.gov/legis/Law.aspx?d=112888">894</a>?<br>
+	<input type="radio" id="4th894info" name="4th894" value="4th894_unknown">
+	<label for="4th894info">unknown</label><br>
+	<input type="radio" id="4thnot_894" name="4th894" value="4thnot_894_value">
+	<label for="4thnot_894">no</label><br>
+	<input type="radio" id="4thyes_894" name="4th894" value="4thyes_894_value">
+	<label for="4thyes_894">yes</label><br>
+	<br>
+<button name="4th894" id="4th894">submit</button><br>
+</div>
+
+<div id="6thprobation_completed" class="C6thprobation_completed" style="display:none;"><br>
+Was probation completed satisfactorily? “Satisfactorily Completed” means (1) probation was NOT revoked and/or (2) they did not return or spend time in jail after they were sentenced, and/or (3) they did NOT have a hearing where the judge terminated them UNSATISFACTORILY due to payments or violations. <br>
+<input type="radio" id="6thprobationInfo" name="6thprobation" value="6thprobation_unknown">
+<label for="6thprobationInfo">unknown</label><br>
+<input type="radio" id="6thyes_probation" name="6thprobation" value="6thyes_probation_value">
+<label for="6thyes_probation">yes</label><br>
+<input type="radio" id="6thno_probation" name="6thprobation" value="6thno_probation_value">
+<label for="6thno_probation">no</label><br>
+<br>
+<button name="6thprobation" id="6thprobation">submit</button><br>
+</div>
+</div>  
+  <div class="column" style="background-color:#bbb;">
+  <div id="Response_display_section_div">
+    <h2>Summary</h2>
+    <p id="StateButtonResponse">
+    </p>
+    <p id="ArrestQuantityResponse">
+    </p>
+    <p id="IncarcerationResponse">
+	</p>
+	<p id="MarResponse">
+    </p>
+    <p id="MostRecentResponse">
+    </p>
+    <p id="IfConvictedResponse">
+    </p>
+    <p id="ChargeSelectionResponse">
+    </p>
+    <p id="CrimeOfViolenceResponse">
+    </p>
+    <p id="SexOffenderResponse">
+    </p>
+    <p id="under17Response">
+    </p>
+    <p id="distributionResponse">
+    </p>
+    <p id="pardonResponse">
+    </p>
+    <p id="893EResponse">
+    </p>
+    <p id="probationResponse">
+    </p>
+    <p id="2ndpardonResponse">
+    </p>
+    <p id="3rdpardonResponse">
+    </p>
+    <p id="10yearsResponse">
+    </p>
+    <p id="RecentFelonyResponse">
+    </p>
+    <p id="DVResponse">
+    </p>
+    <p id="AbuseResponse">
+    </p>
+    <p id="894Response">
+    </p>
+    <p id="2ndprobationResponse">
+    </p>
+    <p id="2ndSexOffenderResponse">
+    </p>
+    <p id="2nd894Response">
+    </p>
+    <p id="3rdprobationResponse">
+    </p>
+    <p id="prosecutionOutcomeResponse">
+    </p>
+    <p id="DUIResponse">
+    </p>
+    <p id="diversion_compResponse">
+    </p>
+    <p id="trueBillResponse">
+    </p>
+    <p id="2ndIfConvictedResponse">
+    </p>
+    <p id="2ndChargeSelectionResponse">
+    </P
+    <p id="SubConResponse">
+    </p>
+    <p id="2ndCrimeOfViolenceResponse">
+    </p>
+    <p id="3rdSexOffenderResponse">
+    </p>
+    <p id="2ndunder17Response">
+    </p>
+    <p id="2nddistributionResponse">
+    </p>
+    <p id="4thpardonResponse">
+    </p>
+    <p id="2nd893EResponse">
+    </p>
+    <p id="4thprobationResponse">
+    </p>
+    <p id="5thpardonResponse">
+    </p>
+    <p id="6thpardonResponse">
+    </p>
+    <p id="2nd10yearsResponse">
+    </p>
+    <p id="3rdRecentFelonyResponse">
+    </p>
+    <p id="2ndDVResponse">
+    </p>
+    <p id="2ndAbuseResponse">
+    </p>
+    <p id="3rd894Response">
+    </p>
+    <p id="5thprobationResponse">
+    </p>
+    <p id="4thSexOffenderResponse">
+    </p>
+    <p id="4th894Response">
+    </p>
+    <p id="6thprobationResponse">
+    </p>
+	</div>
+    <h3>Information Needed</h3>
+	<div id="info_needed_display_section_div">
+    <p id="infoNeeded_State">
+    </p>
+    <p id="infoNeeded_ArrestQuantity">
+    </p>
+    <p id="infoNeeded_IncarcerationResponse">
+	</p>
+	<p id="infoNeeded_MarResponse">
+    </p>
+    <p id="infoNeeded_MostRecentInquiry">
+    </p>
+    <p id="infoNeeded_IfConvicted">
+    </p>
+    <p id="infoNeeded_ChargeSelectionResponse">
+    </p>
+    <p id="infoNeeded_CrimeOfViolence">
+    </p>
+    <p id="infoNeeded_SexOffender">
+    </p>
+    <p id="infoNeeded_Under17">
+    </p>
+    <p id="infoNeeded_Distribution">
+    </p>
+    <p id="infoNeeded_Pardon">
+    </p>
+    <p id="infoNeeded_893E">
+    </p>
+    <p id="infoNeeded_Probation">
+    </p>
+    <p id="infoNeeded_2ndPardon">
+    </p>
+    <p id="infoNeeded_3rdPardon">
+    </p>
+    <p id="infoNeeded_10years">
+    </p>
+    <p id="infoNeeded_Recent_Felony">
+    </p>
+    <p id="infoNeeded_DV">
+    </p>
+    <p id="infoNeeded_Abuse">
+    </p>
+    <p id="infoNeeded_894">
+    </p>
+    <p id="infoNeeded_2ndProbation">
+    </p>
+    <p id="infoNeeded_2ndSexOffender">
+    </p>
+    <p id="infoNeeded_2nd894">
+    </p>
+    <p id="infoNeeded_3rdProbation">
+    </p>
+    <p id="infoNeeded_Prosecution_Outcome">
+    </p>
+    <p id="infoNeeded_DUI">
+    </p>
+    <p id="infoNeeded_diversion_comp">
+    </p>
+    <p id="infoNeeded_trueBill">
+    </p>
+    <p id="infoNeeded_2ndIfConvicted">
+    </p>
+    <p id="infoNeeded_2ndChargeSelectionResponse">
+    </p>
+    <p id="infoNeeded_SubCon">
+    </p>
+    <p id="infoNeeded_2ndCrimeOfViolence">
+    </p>
+    <p id="infoNeeded_3rdSexOffender">
+    </p>
+    <p id="infoNeeded_2ndUnder17">
+    </p>
+    <p id="infoNeeded_2ndDistribution">
+    </p>
+    <p id="infoNeeded_4thPardon">
+    </p>
+    <p id="infoNeeded_2nd893E">
+    </p>
+    <p id="infoNeeded_4thProbation">
+    </p>
+    <p id="infoNeeded_5thPardon">
+    </p>
+    <p id="infoNeeded_6thPardon">
+    </p>
+    <p id="infoNeeded_2nd10years">
+    </p>
+    <p id="infoNeeded_3rdRecent_Felony">
+    </p>
+    <p id="infoNeeded_2ndDV">
+    </p>
+    <p id="infoNeeded_2ndAbuse">
+    </p>
+    <p id="infoNeeded_3rd894">
+    </p>
+    <p id="infoNeeded_5thProbation">
+    </p>
+    <p id="infoNeeded_4thSexOffender">
+    </p>
+    <p id="infoNeeded_4th894">
+    </p>
+    <p id="infoNeeded_6thProbation">
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
